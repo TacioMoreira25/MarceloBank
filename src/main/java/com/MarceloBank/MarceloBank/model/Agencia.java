@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "agencia")
 @AllArgsConstructor
@@ -18,6 +21,9 @@ public class Agencia
     private String endereco;
     private String telefone;
     private String gerente;
+
+    @OneToMany(mappedBy = "agencia")
+    private List<Conta> contas = new ArrayList<>();
 
     public Integer getCodigoAgencia() {
         return codigoAgencia;
@@ -51,5 +57,13 @@ public class Agencia
     }
     public void setTelefone(String telefone) {
         this.telefone = telefone;
+    }
+
+    public List<Conta> getContas() {
+        return contas;
+    }
+
+    public void setContas(List<Conta> contas) {
+        this.contas = contas;
     }
 }

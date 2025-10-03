@@ -27,7 +27,7 @@ public interface CartaoRepository extends JpaRepository<Cartao, Integer> {
                                               @Param("fim") Date fim);
 
     // Cartões por cliente
-    @Query("SELECT c FROM Cartao c JOIN c.conta ct JOIN ct.cliente cl WHERE cl.id = :clienteId")
+    @Query("SELECT c FROM Cartao c WHERE c.conta.cliente.idCliente = :clienteId")
     List<Cartao> findCartoesByClienteId(@Param("clienteId") Integer clienteId);
 
     // Cartões com limite maior que X

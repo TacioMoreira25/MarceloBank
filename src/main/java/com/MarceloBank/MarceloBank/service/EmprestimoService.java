@@ -50,7 +50,7 @@ public class EmprestimoService {
                 .orElseThrow(() -> new RuntimeException("Empréstimo não encontrado"));
 
         // Encontra uma conta do cliente para creditar
-        List<Conta> contas = contaRepository.findByClienteId(emprestimo.getCliente().getIdCliente());
+        List<Conta> contas = contaRepository.findByClienteIdCliente(emprestimo.getCliente().getIdCliente());
         Conta conta = contas.stream().findFirst()
                 .orElseThrow(() -> new RuntimeException("Cliente não possui conta"));
 

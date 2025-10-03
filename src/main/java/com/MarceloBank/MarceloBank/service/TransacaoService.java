@@ -23,7 +23,7 @@ public class TransacaoService {
         this.contaRepository = contaRepository;
     }
 
-    // ✅ EXTRATO DETALHADO COM FILTROS
+    // EXTRATO DETALHADO COM FILTROS
     public List<Transacao> getExtratoComFiltros(Integer contaId, Date dataInicio, Date dataFim, StatusTransacao status) {
         if (dataInicio != null && dataFim != null) {
             return transacaoRepository.findExtratoPorPeriodo(contaId, dataInicio, dataFim);
@@ -34,7 +34,7 @@ public class TransacaoService {
         }
     }
 
-    // ✅ ESTATÍSTICAS DE TRANSAÇÕES
+    // ESTATÍSTICAS DE TRANSAÇÕES
     public Map<String, Object> getEstatisticasTransacoes() {
         List<Object[]> volumeDiario = transacaoRepository.findVolumeDiarioTransacionado();
         List<Transacao> topTransacoes = transacaoRepository.findTop5MaioresTransacoes();

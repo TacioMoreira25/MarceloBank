@@ -68,9 +68,9 @@ public class ClienteService {
         Cliente cliente = clienteRepository.findById(clienteId)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
 
-        List<Conta> contas = contaRepository.findByClienteId(clienteId);
+        List<Conta> contas = contaRepository.findByClienteIdCliente(clienteId);
         List<Cartao> cartoes = cartaoRepository.findCartoesByClienteId(clienteId);
-        List<Emprestimo> emprestimos = emprestimoRepository.findByClienteId(clienteId);
+        List<Emprestimo> emprestimos = emprestimoRepository.findByClienteIdCliente(clienteId);
 
         Map<String, Object> info = new HashMap<>();
         info.put("cliente", cliente);
