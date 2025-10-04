@@ -98,26 +98,3 @@ Windows:
 ```bash
 mvnw.cmd spring-boot:run
 ```
-
-## Como Usar
-
-Ao executar a aplicação, um menu interativo será exibido no console com as seguintes opções:
-
-```
-*** SISTEMA BANCARIO ***
-1- Cadastrar Cliente
-2- Cadastrar Agencia
-3- Abrir Conta
-4- Emitir Cartao
-5- Realizar Deposito
-6- Realizar Saque
-7- Realizar Transferencia
-8- Solicitar Emprestimo
-9- Consultar Saldo
-10- Gerar Extrato
-11- Listar Clientes
-12- Listar Contas
-13- Listar Cartoes
-14- Consultar Saldo Devedor
-0 - Sair
-```
