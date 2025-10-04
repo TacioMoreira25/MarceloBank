@@ -25,8 +25,11 @@ public class ClienteService {
     private final EmprestimoRepository emprestimoRepository;
     private final CartaoRepository cartaoRepository;
 
-    public ClienteService(ClienteRepository clienteRepository, ContaRepository contaRepository,
-                          CartaoRepository cartaoRepository, EmprestimoRepository emprestimoRepository) {
+    public ClienteService(ClienteRepository clienteRepository,
+                          ContaRepository contaRepository, CartaoRepository
+                                  cartaoRepository, EmprestimoRepository
+                                  emprestimoRepository)
+    {
         this.clienteRepository = clienteRepository;
         this.contaRepository = contaRepository;
         this.cartaoRepository = cartaoRepository;
@@ -46,10 +49,12 @@ public class ClienteService {
     }
 
     public Optional<Cliente> buscarPorId(Integer id) {
-        return clienteRepository.findById(id);
+        return clienteRepository.findById
+                (id);
     }
 
-    public Cliente atualizarCliente(Integer id, Cliente clienteAtualizado) {
+    public Cliente atualizarCliente(Integer id, Cliente clienteAtualizado)
+    {
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
 
@@ -64,13 +69,15 @@ public class ClienteService {
     public void deletarCliente(Integer id) {
         clienteRepository.deleteById(id);
     }
-    public Map<String, Object> getInfoCompletaCliente(Integer clienteId) {
+    public Map<String, Object> getInfoCompletaCliente(Integer clienteId)
+    {
         Cliente cliente = clienteRepository.findById(clienteId)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
 
         List<Conta> contas = contaRepository.findByClienteIdCliente(clienteId);
         List<Cartao> cartoes = cartaoRepository.findCartoesByClienteId(clienteId);
-        List<Emprestimo> emprestimos = emprestimoRepository.findByClienteIdCliente(clienteId);
+        List<Emprestimo> emprestimos = emprestimoRepository.findByClienteIdCliente
+                (clienteId);
 
         Map<String, Object> info = new HashMap<>();
         info.put("cliente", cliente);

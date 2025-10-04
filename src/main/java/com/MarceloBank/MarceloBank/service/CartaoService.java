@@ -19,13 +19,15 @@ public class CartaoService {
     private final CartaoRepository cartaoRepository;
     private final ContaRepository contaRepository;
 
-    public CartaoService(CartaoRepository cartaoRepository, ContaRepository contaRepository) {
+    public CartaoService(CartaoRepository cartaoRepository, ContaRepository contaRepository)
+    {
         this.cartaoRepository = cartaoRepository;
         this.contaRepository = contaRepository;
     }
 
-    //CRIAR CARTÃO
-    public Cartao emitirCartao(Integer numeroCartao, Integer numeroConta, TipoCartao tipoCartao, BigDecimal limite) {
+    public Cartao emitirCartao(Integer numeroCartao, Integer numeroConta, TipoCartao
+            tipoCartao, BigDecimal limite)
+    {
         Conta conta = contaRepository.findById(numeroConta)
                 .orElseThrow(() -> new RuntimeException("Conta não encontrada"));
 
@@ -46,7 +48,6 @@ public class CartaoService {
         return cartaoRepository.save(cartao);
     }
 
-    //BLOQUEAR CARTÃO
     public Cartao bloquearCartao(Integer numeroCartao) {
         Cartao cartao = cartaoRepository.findById(numeroCartao)
                 .orElseThrow(() -> new RuntimeException("Cartão não encontrado"));
@@ -55,7 +56,6 @@ public class CartaoService {
         return cartaoRepository.save(cartao);
     }
 
-    //CARTÕES QUE VÃO EXPIRAR
     public List<Cartao> getCartoesProximosExpiracao() {
         Calendar cal = Calendar.getInstance();
         Date hoje = new Date();

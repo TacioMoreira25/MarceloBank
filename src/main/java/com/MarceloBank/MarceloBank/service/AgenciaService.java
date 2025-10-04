@@ -18,18 +18,18 @@ public class AgenciaService {
     private final AgenciaRepository agenciaRepository;
     private final ContaRepository contaRepository;
 
-    public AgenciaService(AgenciaRepository agenciaRepository, ContaRepository contaRepository) {
+    public AgenciaService(AgenciaRepository agenciaRepository, ContaRepository
+            contaRepository) {
         this.agenciaRepository = agenciaRepository;
         this.contaRepository = contaRepository;
     }
 
-    // ✅ CRIAR AGÊNCIA
     public Agencia criarAgencia(Agencia agencia) {
         return agenciaRepository.save(agencia);
     }
 
-    // ✅ RELATÓRIO DA AGÊNCIA
-    public Map<String, Object> getRelatorioAgencia(Integer codigoAgencia) {
+    public Map<String, Object> getRelatorioAgencia(Integer codigoAgencia)
+    {
         Agencia agencia = agenciaRepository.findById(codigoAgencia)
                 .orElseThrow(() -> new RuntimeException("Agência não encontrada"));
 

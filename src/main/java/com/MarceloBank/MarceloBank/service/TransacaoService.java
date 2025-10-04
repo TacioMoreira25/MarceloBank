@@ -14,17 +14,20 @@ import java.util.Map;
 
 @Service
 @Transactional
-public class TransacaoService {
+public class TransacaoService
+{
     private final TransacaoRepository transacaoRepository;
     private final ContaRepository contaRepository;
 
-    public TransacaoService(TransacaoRepository transacaoRepository, ContaRepository contaRepository) {
+    public TransacaoService(TransacaoRepository transacaoRepository, ContaRepository
+            contaRepository) {
         this.transacaoRepository = transacaoRepository;
         this.contaRepository = contaRepository;
     }
 
-    // EXTRATO DETALHADO COM FILTROS
-    public List<Transacao> getExtratoComFiltros(Integer contaId, Date dataInicio, Date dataFim, StatusTransacao status) {
+    public List<Transacao> getExtratoComFiltros(Integer contaId, Date dataInicio,
+                                                Date dataFim, StatusTransacao status)
+    {
         if (dataInicio != null && dataFim != null) {
             return transacaoRepository.findExtratoPorPeriodo(contaId, dataInicio, dataFim);
         } else if (status != null) {
@@ -34,8 +37,8 @@ public class TransacaoService {
         }
     }
 
-    // ESTATÍSTICAS DE TRANSAÇÕES
-    public Map<String, Object> getEstatisticasTransacoes() {
+    public Map<String, Object> getEstatisticasTransacoes()
+    {
         List<Object[]> volumeDiario = transacaoRepository.findVolumeDiarioTransacionado();
         List<Transacao> topTransacoes = transacaoRepository.findTop5MaioresTransacoes();
 

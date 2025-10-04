@@ -21,15 +21,18 @@ public class EmprestimoService {
     private final ClienteRepository clienteRepository;
     private final ContaRepository contaRepository;
 
-    public EmprestimoService(EmprestimoRepository emprestimoRepository, ClienteRepository clienteRepository,
-                             ContaRepository contaRepository) {
+    public EmprestimoService(EmprestimoRepository emprestimoRepository, ClienteRepository
+                                     clienteRepository,
+                             ContaRepository contaRepository)
+    {
         this.emprestimoRepository = emprestimoRepository;
         this.clienteRepository = clienteRepository;
         this.contaRepository = contaRepository;
     }
 
-    //SOLICITAR EMPRÉSTIMO
-    public Emprestimo solicitarEmprestimo(Integer clienteId, BigDecimal valorSolicitado, Integer prazoMeses) {
+    public Emprestimo solicitarEmprestimo(Integer clienteId, BigDecimal valorSolicitado,
+                                          Integer prazoMeses)
+    {
         Cliente cliente = clienteRepository.findById(clienteId)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
 
@@ -44,12 +47,11 @@ public class EmprestimoService {
         return emprestimoRepository.save(emprestimo);
     }
 
-    //PROVAR EMPRÉSTIMO
-    public Emprestimo aprovarEmprestimo(Integer emprestimoId, BigDecimal valorAprovado) {
+    public Emprestimo aprovarEmprestimo(Integer emprestimoId, BigDecimal valorAprovado)
+    {
         Emprestimo emprestimo = emprestimoRepository.findById(emprestimoId)
                 .orElseThrow(() -> new RuntimeException("Empréstimo não encontrado"));
 
-        // Encontra uma conta do cliente para creditar
         List<Conta> contas = contaRepository.findByClienteIdCliente(emprestimo.getCliente().getIdCliente());
         Conta conta = contas.stream().findFirst()
                 .orElseThrow(() -> new RuntimeException("Cliente não possui conta"));
@@ -67,8 +69,8 @@ public class EmprestimoService {
         return emprestimoRepository.save(emprestimo);
     }
 
-    //PAGAR PARCELA
-    public void pagarParcela(Integer emprestimoId, BigDecimal valorPagamento) {
+    public void pagarParcela(Integer emprestimoId, BigDecimal valorPagamento)
+    {
         Emprestimo emprestimo = emprestimoRepository.findById(emprestimoId)
                 .orElseThrow(() -> new RuntimeException("Empréstimo não encontrado"));
 
@@ -78,16 +80,16 @@ public class EmprestimoService {
 
         emprestimo.setSaldoDevedor(emprestimo.getSaldoDevedor().subtract(valorPagamento));
 
-        // Se saldo zerou, marca como LIQUIDADO
-        if (emprestimo.getSaldoDevedor().compareTo(BigDecimal.ZERO) == 0) {
+        if (emprestimo.getSaldoDevedor().compareTo(BigDecimal.ZERO) == 0)
+        {
             emprestimo.setStatus(StatusEmprestimo.LIQUIDADO);
         }
 
         emprestimoRepository.save(emprestimo);
     }
 
-    //SALDO DEVEDOR TOTAL POR CLIENTE
-    public BigDecimal getSaldoDevedorTotal(Integer clienteId) {
+    public BigDecimal getSaldoDevedorTotal(Integer clienteId)
+    {
         List<Object[]> resultados = emprestimoRepository.findSaldoDevedorPorCliente();
 
         return resultados.stream()
