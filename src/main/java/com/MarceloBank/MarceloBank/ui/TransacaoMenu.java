@@ -1,8 +1,11 @@
 package com.MarceloBank.MarceloBank.ui;
 
+import com.MarceloBank.MarceloBank.model.Emprestimo;
 import com.MarceloBank.MarceloBank.model.Transacao;
+import com.MarceloBank.MarceloBank.repository.EmprestimoRepository;
 import com.MarceloBank.MarceloBank.repository.TransacaoRepository;
 import com.MarceloBank.MarceloBank.service.ContaService;
+import com.MarceloBank.MarceloBank.service.EmprestimoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +24,9 @@ public class TransacaoMenu {
 
     @Autowired
     private TransacaoRepository transacaoRepository;
+
+    @Autowired
+    private EmprestimoService emprestimoService ;
 
     public void exibir() {
         int opcao = -1;

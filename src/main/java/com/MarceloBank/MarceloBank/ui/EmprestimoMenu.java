@@ -32,6 +32,7 @@ public class EmprestimoMenu {
         System.out.println("├─────────────────────────────────────┤");
         System.out.println("│  1 │ Solicitar Emprestimo           │");
         System.out.println("│  2 │ Consultar Saldo Devedor        │");
+        System.out.println("│  3 │ Aprovar Emprestimo             │");
         System.out.println("│  0 │ Voltar                         │");
         System.out.println("└─────────────────────────────────────┘");
         System.out.print("\n➤ Escolha uma opcao: ");
@@ -53,6 +54,7 @@ public class EmprestimoMenu {
         switch (opcao) {
             case 1 -> solicitar();
             case 2 -> consultarSaldoDevedor();
+            case 3 -> aprovar();
             case 0 -> {}
             default -> System.err.println("\n✗ Opcao invalida!");
         }
@@ -147,6 +149,43 @@ public class EmprestimoMenu {
             for (int i = 0; i < 50; i++) {
                 System.out.println();
             }
+        }
+    }
+    private void aprovar() {
+        limparTela();
+        System.out.println("\n╔════════════════════════════════════════╗");
+        System.out.println("║      APROVAR EMPRESTIMO                ║");
+        System.out.println("╚════════════════════════════════════════╝\n");
+
+        try {
+            System.out.print("➤ ID do Emprestimo: ");
+            Integer emprestimoId = scanner.nextInt();
+
+            System.out.print("➤ Valor Aprovado: R$ ");
+            BigDecimal valorAprovado = scanner.nextBigDecimal();
+            scanner.nextLine();
+
+            if (valorAprovado.compareTo(BigDecimal.ZERO) <= 0) {
+                System.err.println("\n✗ Erro: Valor deve ser maior que zero");
+                aguardarEnter();
+                return;
+            }
+
+            Emprestimo emprestimo = emprestimoService.aprovarEmprestimo(emprestimoId, valorAprovado);
+
+            System.out.println("\n✓ Emprestimo aprovado com sucesso!");
+            System.out.println("\n┌────────────────────────────────────────┐");
+            System.out.printf("│ ID: %-34d │\n", emprestimo.getIdEmprestimo());
+            System.out.printf("│ Valor Aprovado: R$ %-19.2f │\n", emprestimo.getValorAprovado());
+            System.out.printf("│ Status: %-30s │\n", emprestimo.getStatus());
+            System.out.printf("│ Saldo Devedor: R$ %-19.2f │\n", emprestimo.getSaldoDevedor());
+            System.out.println("└────────────────────────────────────────┘");
+            System.out.println("\n✓ Valor creditado na conta do cliente!");
+            aguardarEnter();
+
+        } catch (Exception e) {
+            System.err.println("\n✗ Erro: " + e.getMessage());
+            aguardarEnter();
         }
     }
 

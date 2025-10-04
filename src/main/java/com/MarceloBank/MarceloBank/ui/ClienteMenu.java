@@ -1,7 +1,6 @@
 package com.MarceloBank.MarceloBank.ui;
 
-import com.MarceloBank.MarceloBank.model.Agencia;
-import com.MarceloBank.MarceloBank.model.Cliente;
+import com.MarceloBank.MarceloBank.model.*;
 import com.MarceloBank.MarceloBank.service.AgenciaService;
 import com.MarceloBank.MarceloBank.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +9,7 @@ import org.springframework.stereotype.Component;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 @Component
@@ -42,6 +42,9 @@ public class ClienteMenu {
         System.out.println("│  1 │ Cadastrar Cliente              │");
         System.out.println("│  2 │ Listar Clientes                │");
         System.out.println("│  3 │ Cadastrar Agencia              │");
+        System.out.println("│  4 │ Informacoes Completas          │");
+        System.out.println("│  5 │ Atualizar Cliente              │");
+        System.out.println("│  6 │ Deletar Cliente                │");
         System.out.println("│  0 │ Voltar                         │");
         System.out.println("└─────────────────────────────────────┘");
         System.out.print("\n➤ Escolha uma opcao: ");
@@ -64,6 +67,9 @@ public class ClienteMenu {
             case 1 -> cadastrar();
             case 2 -> listar();
             case 3 -> cadastrarAgencia();
+            case 4 -> informacoesCompletas();
+            case 5 -> atualizar();
+            case 6 -> deletar();
             case 0 -> {}
             default -> System.err.println("\n✗ Opcao invalida!");
         }
@@ -175,6 +181,147 @@ public class ClienteMenu {
 
             Agencia salva = agenciaService.criarAgencia(agencia);
             System.out.println("\n✓ Sucesso! Codigo: " + salva.getCodigoAgencia());
+            aguardarEnter();
+
+        } catch (Exception e) {
+            System.err.println("\n✗ Erro: " + e.getMessage());
+            aguardarEnter();
+        }
+    }
+    private void informacoesCompletas() {
+        limparTela();
+        System.out.println("\n╔════════════════════════════════════════╗");
+        System.out.println("║    INFORMACOES COMPLETAS CLIENTE       ║");
+        System.out.println("╚════════════════════════════════════════╝\n");
+
+        try {
+            System.out.print("➤ ID do Cliente: ");
+            Integer clienteId = scanner.nextInt();
+            scanner.nextLine();
+
+            Map<String, Object> info = clienteService.getInfoCompletaCliente(clienteId);
+
+            Cliente cliente = (Cliente) info.get("cliente");
+            List<Conta> contas = (List<Conta>) info.get("contas");
+            List<Cartao> cartoes = (List<Cartao>) info.get("cartoes");
+            List<Emprestimo> emprestimos = (List<Emprestimo>) info.get("emprestimos");
+
+            // Informações do Cliente
+            System.out.println("\n┌────────────────────────────────────────┐");
+            System.out.println("│           DADOS DO CLIENTE             │");
+            System.out.println("├────────────────────────────────────────┤");
+            System.out.printf("│ ID: %-34d │\n", cliente.getIdCliente());
+            System.out.printf("│ Nome: %-32s │\n", cliente.getNome());
+            System.out.printf("│ CPF: %-33s │\n", cliente.getCpf());
+            System.out.printf("│ Email: %-31s │\n", cliente.getEmail());
+            System.out.printf("│ Telefone: %-28s │\n", cliente.getTelefone());
+            System.out.println("└────────────────────────────────────────┘");
+
+            // Contas
+            System.out.println("\n┌────────────────────────────────────────┐");
+            System.out.println("│              CONTAS                    │");
+            System.out.println("└────────────────────────────────────────┘");
+            if (contas.isEmpty()) {
+                System.out.println("  ➤ Nenhuma conta encontrada");
+            } else {
+                for (Conta c : contas) {
+                    System.out.printf("  • Conta: %d | Tipo: %s | Saldo: R$ %.2f\n",
+                            c.getNumeroConta(), c.getTipoConta(), c.getSaldo());
+                }
+            }
+
+            // Cartões
+            System.out.println("\n┌────────────────────────────────────────┐");
+            System.out.println("│              CARTOES                   │");
+            System.out.println("└────────────────────────────────────────┘");
+            if (cartoes.isEmpty()) {
+                System.out.println("  ➤ Nenhum cartao encontrado");
+            } else {
+                for (Cartao c : cartoes) {
+                    System.out.printf("  • Cartao: %d | Tipo: %s | Limite: R$ %.2f\n",
+                            c.getNumeroCartao(), c.getTipoCartao(), c.getLimite());
+                }
+            }
+
+            // Empréstimos
+            System.out.println("\n┌────────────────────────────────────────┐");
+            System.out.println("│            EMPRESTIMOS                 │");
+            System.out.println("└────────────────────────────────────────┘");
+            if (emprestimos.isEmpty()) {
+                System.out.println("  ➤ Nenhum emprestimo encontrado");
+            } else {
+                for (Emprestimo e : emprestimos) {
+                    System.out.printf("  • ID: %d | Valor: R$ %.2f | Status: %s | Saldo Devedor: R$ %.2f\n",
+                            e.getIdEmprestimo(), e.getValorSolicitado(), e.getStatus(), e.getSaldoDevedor());
+                }
+            }
+
+            aguardarEnter();
+
+        } catch (Exception e) {
+            System.err.println("\n✗ Erro: " + e.getMessage());
+            aguardarEnter();
+        }
+    }
+    private void atualizar() {
+        limparTela();
+        System.out.println("\n╔════════════════════════════════════════╗");
+        System.out.println("║       ATUALIZAR CLIENTE                ║");
+        System.out.println("╚════════════════════════════════════════╝\n");
+
+        try {
+            System.out.print("➤ ID do Cliente: ");
+            Integer id = scanner.nextInt();
+            scanner.nextLine();
+
+            Cliente clienteAtualizado = new Cliente();
+
+            System.out.print("➤ Novo Nome: ");
+            String nome = scanner.nextLine();
+            clienteAtualizado.setNome(nome);
+
+            System.out.print("➤ Novo Email: ");
+            String email = scanner.nextLine();
+            clienteAtualizado.setEmail(email);
+
+            System.out.print("➤ Novo Telefone: ");
+            String telefone = scanner.nextLine();
+            clienteAtualizado.setTelefone(telefone);
+
+            System.out.print("➤ Novo Endereco: ");
+            String endereco = scanner.nextLine();
+            clienteAtualizado.setEndereco(endereco);
+
+            Cliente atualizado = clienteService.atualizarCliente(id, clienteAtualizado);
+            System.out.println("\n✓ Cliente atualizado com sucesso! ID: " + atualizado.getIdCliente());
+            aguardarEnter();
+
+        } catch (Exception e) {
+            System.err.println("\n✗ Erro: " + e.getMessage());
+            aguardarEnter();
+        }
+    }
+
+    private void deletar() {
+        limparTela();
+        System.out.println("\n╔════════════════════════════════════════╗");
+        System.out.println("║        DELETAR CLIENTE                 ║");
+        System.out.println("╚════════════════════════════════════════╝\n");
+
+        try {
+            System.out.print("➤ ID do Cliente: ");
+            Integer id = scanner.nextInt();
+            scanner.nextLine();
+
+            System.out.print("\n⚠ Confirma a exclusao do cliente? (S/N): ");
+            String confirmacao = scanner.nextLine().toUpperCase();
+
+            if (confirmacao.equals("S")) {
+                clienteService.deletarCliente(id);
+                System.out.println("\n✓ Cliente deletado com sucesso!");
+            } else {
+                System.out.println("\n✗ Operacao cancelada");
+            }
             aguardarEnter();
 
         } catch (Exception e) {
