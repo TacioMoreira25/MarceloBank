@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 @Service
 @Transactional
@@ -82,11 +81,6 @@ public class ContaService {
         transacao.setDescricao("Transferência entre contas");
 
         transacaoRepository.save(transacao);
-    }
-
-    public List<Transacao> extrato(Integer numeroConta)
-    {
-        return transacaoRepository.findTransacoesByConta(numeroConta);
     }
 
     private void registrarTransacao(Conta origem, Conta destino, BigDecimal valor,

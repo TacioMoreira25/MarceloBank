@@ -56,15 +56,6 @@ public class CartaoService {
         return cartaoRepository.save(cartao);
     }
 
-    public List<Cartao> getCartoesProximosExpiracao() {
-        Calendar cal = Calendar.getInstance();
-        Date hoje = new Date();
-        cal.setTime(hoje);
-        cal.add(Calendar.DAY_OF_YEAR, 90); // Próximos 90 dias
-
-        return cartaoRepository.findCartoesProximosExpiracao(hoje, cal.getTime());
-    }
-
     public List<Cartao> listarTodosCartoes() {
         return cartaoRepository.findAll();
     }
