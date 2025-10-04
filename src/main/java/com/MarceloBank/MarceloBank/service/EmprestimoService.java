@@ -88,14 +88,12 @@ public class EmprestimoService {
         emprestimoRepository.save(emprestimo);
     }
 
-    public BigDecimal getSaldoDevedorTotal(Integer clienteId)
-    {
-        List<Object[]> resultados = emprestimoRepository.findSaldoDevedorPorCliente();
+    public BigDecimal getSaldoDevedorTotal(Integer clienteId) {
+            List<Object[]> resultados = emprestimoRepository.findSaldoDevedorPorCliente(clienteId);
 
-        return resultados.stream()
-                .filter(obj -> obj[0].equals(clienteId))
-                .findFirst()
-                .map(obj -> (BigDecimal) obj[1])
-                .orElse(BigDecimal.ZERO);
+            return resultados.stream()
+                    .findFirst()
+                    .map(obj -> (BigDecimal) obj[1])
+                    .orElse(BigDecimal.ZERO);
     }
 }

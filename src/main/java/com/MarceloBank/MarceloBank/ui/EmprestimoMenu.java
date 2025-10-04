@@ -33,6 +33,7 @@ public class EmprestimoMenu {
         System.out.println("│  1 │ Solicitar Emprestimo           │");
         System.out.println("│  2 │ Consultar Saldo Devedor        │");
         System.out.println("│  3 │ Aprovar Emprestimo             │");
+        System.out.println("│  4 │ Pagar Parcela                  │");
         System.out.println("│  0 │ Voltar                         │");
         System.out.println("└─────────────────────────────────────┘");
         System.out.print("\n➤ Escolha uma opcao: ");
@@ -55,6 +56,7 @@ public class EmprestimoMenu {
             case 1 -> solicitar();
             case 2 -> consultarSaldoDevedor();
             case 3 -> aprovar();
+            case 4 -> pagarParcela();
             case 0 -> {}
             default -> System.err.println("\n✗ Opcao invalida!");
         }
@@ -181,6 +183,31 @@ public class EmprestimoMenu {
             System.out.printf("│ Saldo Devedor: R$ %-19.2f │\n", emprestimo.getSaldoDevedor());
             System.out.println("└────────────────────────────────────────┘");
             System.out.println("\n✓ Valor creditado na conta do cliente!");
+            aguardarEnter();
+
+        } catch (Exception e) {
+            System.err.println("\n✗ Erro: " + e.getMessage());
+            aguardarEnter();
+        }
+    }
+
+    private void pagarParcela() {
+        limparTela();
+        System.out.println("\n╔════════════════════════════════════════╗");
+        System.out.println("║          PAGAR PARCELA                 ║");
+        System.out.println("╚════════════════════════════════════════╝\n");
+
+        try {
+            System.out.print("➤ ID do Emprestimo: ");
+            Integer emprestimoId = scanner.nextInt();
+
+            System.out.print("➤ Valor do Pagamento: R$ ");
+            BigDecimal valorPagamento = scanner.nextBigDecimal();
+            scanner.nextLine();
+
+            emprestimoService.pagarParcela(emprestimoId, valorPagamento);
+
+            System.out.println("\n✓ Parcela paga com sucesso!");
             aguardarEnter();
 
         } catch (Exception e) {
