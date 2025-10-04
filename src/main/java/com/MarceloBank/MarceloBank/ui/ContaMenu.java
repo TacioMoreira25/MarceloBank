@@ -50,6 +50,7 @@ public class ContaMenu {
         System.out.println("│  3 │ Listar Contas                  │");
         System.out.println("│  4 │ Emitir Cartao                  │");
         System.out.println("│  5 │ Listar Cartoes                 │");
+        System.out.println("│  6 │ Bloquear Cartao                │");
         System.out.println("│  0 │ Voltar                         │");
         System.out.println("└─────────────────────────────────────┘");
         System.out.print("\n➤ Escolha uma opcao: ");
@@ -74,6 +75,7 @@ public class ContaMenu {
             case 3 -> listar();
             case 4 -> emitirCartao();
             case 5 -> listarCartoes();
+            case 6 -> bloquearCartao();
             case 0 -> {}
             default -> System.err.println("\n✗ Opcao invalida!");
         }
@@ -248,6 +250,28 @@ public class ContaMenu {
                 System.out.println("└────────────────────────────────────────┘\n");
             }
 
+            aguardarEnter();
+
+        } catch (Exception e) {
+            System.err.println("\n✗ Erro: " + e.getMessage());
+            aguardarEnter();
+        }
+    }
+
+    private void bloquearCartao() {
+        limparTela();
+        System.out.println("\n╔════════════════════════════════════════╗");
+        System.out.println("║         BLOQUEAR CARTAO                ║");
+        System.out.println("╚════════════════════════════════════════╝\n");
+
+        try {
+            System.out.print("➤ Numero do Cartao: ");
+            Integer numeroCartao = scanner.nextInt();
+            scanner.nextLine();
+
+            cartaoService.bloquearCartao(numeroCartao);
+
+            System.out.println("\n✓ Cartao bloqueado com sucesso!");
             aguardarEnter();
 
         } catch (Exception e) {

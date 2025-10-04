@@ -28,7 +28,87 @@ public class Conta
     @Setter
     private Agencia agencia;
 
-    @Getter
+    public Integer getNumeroConta() {
+		return numeroConta;
+	}
+
+	public void setNumeroConta(Integer numeroConta) {
+		this.numeroConta = numeroConta;
+	}
+
+	public Agencia getAgencia() {
+		return agencia;
+	}
+
+	public void setAgencia(Agencia agencia) {
+		this.agencia = agencia;
+	}
+
+	public TipoConta getTipoConta() {
+		return tipoConta;
+	}
+
+	public void setTipoConta(TipoConta tipoConta) {
+		this.tipoConta = tipoConta;
+	}
+
+	public BigDecimal getSaldo() {
+		return saldo;
+	}
+
+	public void setSaldo(BigDecimal saldo) {
+		this.saldo = saldo;
+	}
+
+	public Date getDataAbertura() {
+		return dataAbertura;
+	}
+
+	public void setDataAbertura(Date dataAbertura) {
+		this.dataAbertura = dataAbertura;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
+	public List<Cartao> getCartoes() {
+		return cartoes;
+	}
+
+	public void setCartoes(List<Cartao> cartoes) {
+		this.cartoes = cartoes;
+	}
+
+	public List<Transacao> getTransacoesOrigem() {
+		return transacoesOrigem;
+	}
+
+	public void setTransacoesOrigem(List<Transacao> transacoesOrigem) {
+		this.transacoesOrigem = transacoesOrigem;
+	}
+
+	public List<Transacao> getTransacoesDestino() {
+		return transacoesDestino;
+	}
+
+	public void setTransacoesDestino(List<Transacao> transacoesDestino) {
+		this.transacoesDestino = transacoesDestino;
+	}
+
+	@Getter
     @Setter
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_conta")

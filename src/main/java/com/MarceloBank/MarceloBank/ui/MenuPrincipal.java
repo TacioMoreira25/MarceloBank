@@ -50,7 +50,7 @@ public class MenuPrincipal {
     }
 
     private void exibirOpcoes() {
-        limparTela();
+        // limparTela();
         System.out.println("\n┌─────────────────────────────────────┐");
         System.out.println("│          MENU PRINCIPAL             │");
         System.out.println("├─────────────────────────────────────┤");
