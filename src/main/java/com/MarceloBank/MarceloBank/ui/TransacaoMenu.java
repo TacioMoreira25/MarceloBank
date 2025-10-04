@@ -12,11 +12,9 @@ import java.util.List;
 import java.util.Scanner;
 
 @Component
-public class TransacaoMenu
-{
+public class TransacaoMenu {
     private final Scanner scanner = new Scanner(System.in);
-    private final SimpleDateFormat dateFormat = new
-            SimpleDateFormat("dd/MM/yyyy HH:mm");
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
     @Autowired
     private ContaService contaService;
@@ -35,13 +33,17 @@ public class TransacaoMenu
     }
 
     private void exibirOpcoes() {
-        System.out.println("\n=== TRANSACOES ===");
-        System.out.println("1 - Deposito");
-        System.out.println("2 - Saque");
-        System.out.println("3 - Transferencia");
-        System.out.println("4 - Extrato");
-        System.out.println("0 - Voltar");
-        System.out.print("\nOpcao: ");
+        limparTela();
+        System.out.println("\n┌─────────────────────────────────────┐");
+        System.out.println("│           TRANSACOES                │");
+        System.out.println("├─────────────────────────────────────┤");
+        System.out.println("│  1 │ Deposito                       │");
+        System.out.println("│  2 │ Saque                          │");
+        System.out.println("│  3 │ Transferencia                  │");
+        System.out.println("│  4 │ Extrato                        │");
+        System.out.println("│  0 │ Voltar                         │");
+        System.out.println("└─────────────────────────────────────┘");
+        System.out.print("\n➤ Escolha uma opcao: ");
     }
 
     private int lerOpcao() {
@@ -51,7 +53,7 @@ public class TransacaoMenu
             return opcao;
         } catch (Exception e) {
             scanner.nextLine();
-            System.err.println("\nErro: Digite um numero valido");
+            System.err.println("\n✗ Erro: Digite um numero valido");
             return -1;
         }
     }
@@ -63,114 +65,165 @@ public class TransacaoMenu
             case 3 -> realizarTransferencia();
             case 4 -> gerarExtrato();
             case 0 -> {}
-            default -> System.err.println("\nOpcao invalida!");
+            default -> System.err.println("\n✗ Opcao invalida!");
         }
     }
 
     private void realizarDeposito() {
-        System.out.println("\n=== DEPOSITO ===");
+        limparTela();
+        System.out.println("\n╔════════════════════════════════════════╗");
+        System.out.println("║            DEPOSITO                    ║");
+        System.out.println("╚════════════════════════════════════════╝\n");
 
         try {
-            System.out.print("Conta: ");
+            System.out.print("➤ Conta: ");
             Integer numeroConta = scanner.nextInt();
 
-            System.out.print("Valor: R$ ");
+            System.out.print("➤ Valor: R$ ");
             BigDecimal valor = scanner.nextBigDecimal();
 
             if (valor.compareTo(BigDecimal.ZERO) <= 0) {
-                System.err.println("\nErro: Valor deve ser maior que zero");
+                System.err.println("\n✗ Erro: Valor deve ser maior que zero");
+                aguardarEnter();
                 return;
             }
 
             contaService.depositar(numeroConta, valor);
-            System.out.printf("\nDeposito realizado! R$ %.2f\n", valor);
+            System.out.printf("\n✓ Deposito realizado! R$ %.2f\n", valor);
+            aguardarEnter();
 
         } catch (Exception e) {
-            System.err.println("\nErro: " + e.getMessage());
+            System.err.println("\n✗ Erro: " + e.getMessage());
+            aguardarEnter();
         }
     }
 
     private void realizarSaque() {
-        System.out.println("\n=== SAQUE ===");
+        limparTela();
+        System.out.println("\n╔════════════════════════════════════════╗");
+        System.out.println("║             SAQUE                      ║");
+        System.out.println("╚════════════════════════════════════════╝\n");
 
         try {
-            System.out.print("Conta: ");
+            System.out.print("➤ Conta: ");
             Integer numeroConta = scanner.nextInt();
 
-            System.out.print("Valor: R$ ");
+            System.out.print("➤ Valor: R$ ");
             BigDecimal valor = scanner.nextBigDecimal();
 
             if (valor.compareTo(BigDecimal.ZERO) <= 0) {
-                System.err.println("\nErro: Valor deve ser maior que zero");
+                System.err.println("\n✗ Erro: Valor deve ser maior que zero");
+                aguardarEnter();
                 return;
             }
 
             contaService.sacar(numeroConta, valor);
-            System.out.printf("\nSaque realizado! R$ %.2f\n", valor);
+            System.out.printf("\n✓ Saque realizado! R$ %.2f\n", valor);
+            aguardarEnter();
 
         } catch (Exception e) {
-            System.err.println("\nErro: " + e.getMessage());
+            System.err.println("\n✗ Erro: " + e.getMessage());
+            aguardarEnter();
         }
     }
 
     private void realizarTransferencia() {
-        System.out.println("\n=== TRANSFERENCIA ===");
+        limparTela();
+        System.out.println("\n╔════════════════════════════════════════╗");
+        System.out.println("║         TRANSFERENCIA                  ║");
+        System.out.println("╚════════════════════════════════════════╝\n");
 
         try {
-            System.out.print("Conta Origem: ");
+            System.out.print("➤ Conta Origem: ");
             Integer contaOrigem = scanner.nextInt();
 
-            System.out.print("Conta Destino: ");
+            System.out.print("➤ Conta Destino: ");
             Integer contaDestino = scanner.nextInt();
 
-            System.out.print("Valor: R$ ");
+            System.out.print("➤ Valor: R$ ");
             BigDecimal valor = scanner.nextBigDecimal();
 
             if (valor.compareTo(BigDecimal.ZERO) <= 0) {
-                System.err.println("\nErro: Valor deve ser maior que zero");
+                System.err.println("\n✗ Erro: Valor deve ser maior que zero");
+                aguardarEnter();
                 return;
             }
 
             if (contaOrigem.equals(contaDestino)) {
-                System.err.println("\nErro: Contas nao podem ser iguais");
+                System.err.println("\n✗ Erro: Contas nao podem ser iguais");
+                aguardarEnter();
                 return;
             }
 
             contaService.transferir(contaOrigem, contaDestino, valor);
-            System.out.printf("\nTransferencia realizada! R$ %.2f\n", valor);
+            System.out.printf("\n✓ Transferencia realizada! R$ %.2f\n", valor);
+            aguardarEnter();
 
         } catch (Exception e) {
-            System.err.println("\nErro: " + e.getMessage());
+            System.err.println("\n✗ Erro: " + e.getMessage());
+            aguardarEnter();
         }
     }
 
     private void gerarExtrato() {
-        System.out.println("\n=== EXTRATO ===");
+        limparTela();
+        System.out.println("\n╔════════════════════════════════════════╗");
+        System.out.println("║            EXTRATO                     ║");
+        System.out.println("╚════════════════════════════════════════╝\n");
 
         try {
-            System.out.print("Conta: ");
+            System.out.print("➤ Conta: ");
             Integer numeroConta = scanner.nextInt();
 
             List<Transacao> transacoes = transacaoRepository.
                     findTransacoesByConta(numeroConta);
 
             if (transacoes.isEmpty()) {
-                System.out.println("Nenhuma transacao encontrada");
+                System.out.println("\n➤ Nenhuma transacao encontrada");
+                aguardarEnter();
                 return;
             }
 
-            System.out.println();
+            System.out.println("\n┌──────────────────────────────────────────────────────────────┐");
+            System.out.println("│ Data/Hora       │ Tipo           │ Valor       │ Status      │");
+            System.out.println("├──────────────────────────────────────────────────────────────┤");
+
             for (Transacao t : transacoes) {
-                System.out.printf("%s | %s | R$ %.2f | %s\n",
+                System.out.printf("│ %-15s │ %-14s │ R$ %8.2f │ %-11s │\n",
                         dateFormat.format(t.getDataTransacao()),
                         t.getTipoTransacao(),
                         t.getValor(),
                         t.getStatus());
             }
-            System.out.println("\nTotal: " + transacoes.size() + " transacao(oes)");
+
+            System.out.println("└──────────────────────────────────────────────────────────────┘");
+            System.out.println("\n➤ Total: " + transacoes.size() + " transacao(oes)");
+            aguardarEnter();
 
         } catch (Exception e) {
-            System.err.println("\nErro: " + e.getMessage());
+            System.err.println("\n✗ Erro: " + e.getMessage());
+            aguardarEnter();
         }
+    }
+
+    private void limparTela() {
+        try {
+            if (System.getProperty("os.name").contains("Windows")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().
+                        start().waitFor();
+            } else {
+                System.out.print("\033[H\033[2J");
+                System.out.flush();
+            }
+        } catch (Exception e) {
+            for (int i = 0; i < 50; i++) {
+                System.out.println();
+            }
+        }
+    }
+
+    private void aguardarEnter() {
+        System.out.print("\n➤ Pressione ENTER para continuar...");
+        scanner.nextLine();
     }
 }

@@ -7,6 +7,7 @@ import com.MarceloBank.MarceloBank.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -15,6 +16,7 @@ import java.util.Scanner;
 public class ClienteMenu {
 
     private final Scanner scanner = new Scanner(System.in);
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     @Autowired
     private ClienteService clienteService;
@@ -33,12 +35,16 @@ public class ClienteMenu {
     }
 
     private void exibirOpcoes() {
-        System.out.println("\n=== CLIENTES ===");
-        System.out.println("1 - Cadastrar Cliente");
-        System.out.println("2 - Listar Clientes");
-        System.out.println("3 - Cadastrar Agencia");
-        System.out.println("0 - Voltar");
-        System.out.print("\nOpcao: ");
+        limparTela();
+        System.out.println("\n┌─────────────────────────────────────┐");
+        System.out.println("│            CLIENTES                 │");
+        System.out.println("├─────────────────────────────────────┤");
+        System.out.println("│  1 │ Cadastrar Cliente              │");
+        System.out.println("│  2 │ Listar Clientes                │");
+        System.out.println("│  3 │ Cadastrar Agencia              │");
+        System.out.println("│  0 │ Voltar                         │");
+        System.out.println("└─────────────────────────────────────┘");
+        System.out.print("\n➤ Escolha uma opcao: ");
     }
 
     private int lerOpcao() {
@@ -48,7 +54,7 @@ public class ClienteMenu {
             return opcao;
         } catch (Exception e) {
             scanner.nextLine();
-            System.err.println("\nErro: Digite um numero valido");
+            System.err.println("\n✗ Erro: Digite um numero valido");
             return -1;
         }
     }
@@ -59,27 +65,34 @@ public class ClienteMenu {
             case 2 -> listar();
             case 3 -> cadastrarAgencia();
             case 0 -> {}
-            default -> System.err.println("\nOpcao invalida!");
+            default -> System.err.println("\n✗ Opcao invalida!");
         }
     }
 
     private void cadastrar() {
-        System.out.println("\n=== CADASTRAR CLIENTE ===");
+        limparTela();
+        System.out.println("\n╔════════════════════════════════════════╗");
+        System.out.println("║       CADASTRAR CLIENTE                ║");
+        System.out.println("╚════════════════════════════════════════╝\n");
 
         try {
-            System.out.print("Nome: ");
+            System.out.print("➤ Nome: ");
             String nome = scanner.nextLine();
 
-            System.out.print("CPF: ");
+            System.out.print("➤ Data de Nascimento: ");
+            String dataNascStr = scanner.nextLine();
+            Date dataNascimento = dateFormat.parse(dataNascStr);
+
+            System.out.print("➤ CPF: ");
             String cpf = scanner.nextLine();
 
-            System.out.print("Email: ");
+            System.out.print("➤ Email: ");
             String email = scanner.nextLine();
 
-            System.out.print("Telefone: ");
+            System.out.print("➤ Telefone: ");
             String telefone = scanner.nextLine();
 
-            System.out.print("Endereco: ");
+            System.out.print("➤ Endereco: ");
             String endereco = scanner.nextLine();
 
             Cliente cliente = new Cliente();
@@ -88,52 +101,70 @@ public class ClienteMenu {
             cliente.setEmail(email);
             cliente.setTelefone(telefone);
             cliente.setEndereco(endereco);
+            cliente.setDataNascimento(dataNascimento);
             cliente.setDataCadastro(new Date());
 
             Cliente salvo = clienteService.criarCliente(cliente);
-            System.out.println("\nSucesso! ID: " + salvo.getIdCliente());
+            System.out.println("\n✓ Sucesso! ID: " + salvo.getIdCliente());
+            aguardarEnter();
 
         } catch (Exception e) {
-            System.err.println("\nErro: " + e.getMessage());
+            System.err.println("\n✗ Erro: " + e.getMessage());
+            aguardarEnter();
         }
     }
 
     private void listar() {
-        System.out.println("\n=== CLIENTES ===");
+        limparTela();
+        System.out.println("\n╔════════════════════════════════════════╗");
+        System.out.println("║         LISTA DE CLIENTES              ║");
+        System.out.println("╚════════════════════════════════════════╝\n");
 
         try {
             List<Cliente> clientes = clienteService.listarTodos();
 
             if (clientes.isEmpty()) {
-                System.out.println("Nenhum cliente cadastrado");
+                System.out.println("➤ Nenhum cliente cadastrado");
+                aguardarEnter();
                 return;
             }
 
             for (Cliente c : clientes) {
-                System.out.printf("\nID: %d\nNome: %s\nCPF: %s\nEmail: %s\n",
-                        c.getIdCliente(), c.getNome(), c.getCpf(), c.getEmail());
-                System.out.println("-".repeat(40));
+                System.out.println("┌────────────────────────────────────────┐");
+                System.out.printf("│ ID: %-34d │\n", c.getIdCliente());
+                System.out.printf("│ Nome: %-32s │\n", c.getNome());
+                System.out.printf("│ CPF: %-33s │\n", c.getCpf());
+                System.out.printf("│ Email: %-31s │\n", c.getEmail());
+                System.out.printf("│ Data Nasc: %-27s │\n",
+                        c.getDataNascimento() != null ? dateFormat.format(c.getDataNascimento()) : "N/A");
+                System.out.println("└────────────────────────────────────────┘\n");
             }
 
+            aguardarEnter();
+
         } catch (Exception e) {
-            System.err.println("\nErro: " + e.getMessage());
+            System.err.println("\n✗ Erro: " + e.getMessage());
+            aguardarEnter();
         }
     }
 
     private void cadastrarAgencia() {
-        System.out.println("\n=== CADASTRAR AGENCIA ===");
+        limparTela();
+        System.out.println("\n╔════════════════════════════════════════╗");
+        System.out.println("║       CADASTRAR AGENCIA                ║");
+        System.out.println("╚════════════════════════════════════════╝\n");
 
         try {
-            System.out.print("Nome: ");
+            System.out.print("➤ Nome: ");
             String nome = scanner.nextLine();
 
-            System.out.print("Endereco: ");
+            System.out.print("➤ Endereco: ");
             String endereco = scanner.nextLine();
 
-            System.out.print("Telefone: ");
+            System.out.print("➤ Telefone: ");
             String telefone = scanner.nextLine();
 
-            System.out.print("Gerente: ");
+            System.out.print("➤ Gerente: ");
             String gerente = scanner.nextLine();
 
             Agencia agencia = new Agencia();
@@ -143,10 +174,33 @@ public class ClienteMenu {
             agencia.setGerente(gerente);
 
             Agencia salva = agenciaService.criarAgencia(agencia);
-            System.out.println("\nSucesso! Codigo: " + salva.getCodigoAgencia());
+            System.out.println("\n✓ Sucesso! Codigo: " + salva.getCodigoAgencia());
+            aguardarEnter();
 
         } catch (Exception e) {
-            System.err.println("\nErro: " + e.getMessage());
+            System.err.println("\n✗ Erro: " + e.getMessage());
+            aguardarEnter();
         }
+    }
+
+    private void limparTela() {
+        try {
+            if (System.getProperty("os.name").contains("Windows")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().
+                        start().waitFor();
+            } else {
+                System.out.print("\033[H\033[2J");
+                System.out.flush();
+            }
+        } catch (Exception e) {
+            for (int i = 0; i < 50; i++) {
+                System.out.println();
+            }
+        }
+    }
+
+    private void aguardarEnter() {
+        System.out.print("\n➤ Pressione ENTER para continuar...");
+        scanner.nextLine();
     }
 }
