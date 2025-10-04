@@ -22,7 +22,87 @@ public class Emprestimo
     @Setter
     private Integer idEmprestimo;
 
-    @ManyToOne
+    public Integer getIdEmprestimo() {
+		return idEmprestimo;
+	}
+
+	public void setIdEmprestimo(Integer idEmprestimo) {
+		this.idEmprestimo = idEmprestimo;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
+	public BigDecimal getValorSolicitado() {
+		return valorSolicitado;
+	}
+
+	public void setValorSolicitado(BigDecimal valorSolicitado) {
+		this.valorSolicitado = valorSolicitado;
+	}
+
+	public BigDecimal getValorAprovado() {
+		return valorAprovado;
+	}
+
+	public void setValorAprovado(BigDecimal valorAprovado) {
+		this.valorAprovado = valorAprovado;
+	}
+
+	public BigDecimal getTaxaJuros() {
+		return taxaJuros;
+	}
+
+	public void setTaxaJuros(BigDecimal taxaJuros) {
+		this.taxaJuros = taxaJuros;
+	}
+
+	public Integer getPrazoMeses() {
+		return prazoMeses;
+	}
+
+	public void setPrazoMeses(Integer prazoMeses) {
+		this.prazoMeses = prazoMeses;
+	}
+
+	public Date getDataSolicitacao() {
+		return dataSolicitacao;
+	}
+
+	public void setDataSolicitacao(Date dataSolicitacao) {
+		this.dataSolicitacao = dataSolicitacao;
+	}
+
+	public Date getDataAprovacao() {
+		return dataAprovacao;
+	}
+
+	public void setDataAprovacao(Date dataAprovacao) {
+		this.dataAprovacao = dataAprovacao;
+	}
+
+	public StatusEmprestimo getStatus() {
+		return status;
+	}
+
+	public void setStatus(StatusEmprestimo status) {
+		this.status = status;
+	}
+
+	public BigDecimal getSaldoDevedor() {
+		return saldoDevedor;
+	}
+
+	public void setSaldoDevedor(BigDecimal saldoDevedor) {
+		this.saldoDevedor = saldoDevedor;
+	}
+
+	@ManyToOne
     @JoinColumn(name = "id_cliente")
     @Getter
     @Setter
