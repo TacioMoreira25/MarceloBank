@@ -30,10 +30,10 @@ public class EmprestimoService {
         this.contaRepository = contaRepository;
     }
 
-    public Emprestimo solicitarEmprestimo(Integer clienteId, BigDecimal valorSolicitado,
+    public Emprestimo solicitarEmprestimo(String cpf, BigDecimal valorSolicitado,
                                           Integer prazoMeses)
     {
-        Cliente cliente = clienteRepository.findById(clienteId)
+        Cliente cliente = clienteRepository.findByCpf(cpf)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
 
         Emprestimo emprestimo = new Emprestimo();
@@ -52,7 +52,7 @@ public class EmprestimoService {
         Emprestimo emprestimo = emprestimoRepository.findById(emprestimoId)
                 .orElseThrow(() -> new RuntimeException("Empréstimo não encontrado"));
 
-        List<Conta> contas = contaRepository.findByClienteIdCliente(emprestimo.getCliente().getIdCliente());
+        List<Conta> contas = contaRepository.findByClienteCpf(emprestimo.getCliente().getCpf());
         Conta conta = contas.stream().findFirst()
                 .orElseThrow(() -> new RuntimeException("Cliente não possui conta"));
 
@@ -88,8 +88,8 @@ public class EmprestimoService {
         emprestimoRepository.save(emprestimo);
     }
 
-    public BigDecimal getSaldoDevedorTotal(Integer clienteId) {
-            List<Object[]> resultados = emprestimoRepository.findSaldoDevedorPorCliente(clienteId);
+    public BigDecimal getSaldoDevedorTotal(String cpf) {
+            List<Object[]> resultados = emprestimoRepository.findSaldoDevedorPorCliente(cpf);
 
             return resultados.stream()
                     .findFirst()

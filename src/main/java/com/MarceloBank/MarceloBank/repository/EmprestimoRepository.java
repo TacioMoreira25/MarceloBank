@@ -9,9 +9,9 @@ import java.util.List;
 
 public interface EmprestimoRepository extends JpaRepository<Emprestimo, Integer>
 {
-    List<Emprestimo> findByClienteIdCliente(Integer idCliente);
+    List<Emprestimo> findByClienteCpf(String cpf);
 
-    @Query("SELECT e.cliente.idCliente, SUM(e.saldoDevedor) FROM Emprestimo " +
-                "e WHERE e.cliente.idCliente = :clienteId GROUP BY e.cliente.idCliente")
-        List<Object[]> findSaldoDevedorPorCliente(@Param("clienteId") Integer clienteId);
+    @Query("SELECT e.cliente.cpf, SUM(e.saldoDevedor) FROM Emprestimo " +
+                "e WHERE e.cliente.cpf = :cpf GROUP BY e.cliente.cpf")
+        List<Object[]> findSaldoDevedorPorCliente(@Param("cpf") String cpf);
 }

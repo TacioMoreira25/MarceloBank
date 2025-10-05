@@ -9,12 +9,6 @@ import java.util.List;
 
 public interface CartaoRepository extends JpaRepository<Cartao, Integer>
 {
-
-    @Query("SELECT c FROM Cartao c WHERE c.dataValidade BETWEEN :inicio AND :fim AND c.status = 'ATIVO'")
-    List<Cartao> findCartoesProximosExpiracao(@Param("inicio") Date inicio,
-                                              @Param("fim") Date fim);
-
-    @Query("SELECT c FROM Cartao c WHERE c.conta.cliente.idCliente = :clienteId")
-    List<Cartao> findCartoesByClienteId(@Param("clienteId") Integer clienteId);
-
+    @Query("SELECT c FROM Cartao c WHERE c.conta.cliente.cpf = :cpf")
+    List<Cartao> findCartoesByClienteCpf(@Param("cpf") String cpf);
 }

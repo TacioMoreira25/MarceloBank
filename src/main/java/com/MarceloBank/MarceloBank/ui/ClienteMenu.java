@@ -195,11 +195,10 @@ public class ClienteMenu {
         System.out.println("╚════════════════════════════════════════╝\n");
 
         try {
-            System.out.print("➤ ID do Cliente: ");
-            Integer clienteId = scanner.nextInt();
-            scanner.nextLine();
+            System.out.print("➤ CPF do Cliente: ");
+            String cpf  = scanner.nextLine();
 
-            Map<String, Object> info = clienteService.getInfoCompletaCliente(clienteId);
+            Map<String, Object> info = clienteService.getInfoCompletaCliente(cpf);
 
             Cliente cliente = (Cliente) info.get("cliente");
             List<Conta> contas = (List<Conta>) info.get("contas");
@@ -255,7 +254,6 @@ public class ClienteMenu {
                             e.getIdEmprestimo(), e.getValorSolicitado(), e.getStatus(), e.getSaldoDevedor());
                 }
             }
-
             aguardarEnter();
 
         } catch (Exception e) {
@@ -270,30 +268,32 @@ public class ClienteMenu {
         System.out.println("╚════════════════════════════════════════╝\n");
 
         try {
-            System.out.print("➤ ID do Cliente: ");
-            Integer id = scanner.nextInt();
-            scanner.nextLine();
+            System.out.print("➤ CPF do Cliente: ");
+            String cpf = scanner.nextLine();
 
-            Cliente clienteAtualizado = new Cliente();
+            Cliente clienteExistente = clienteService.listarTodos().stream()
+                    .filter(c -> c.getCpf().equals(cpf))
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
 
-            System.out.print("➤ Novo Nome: ");
+            System.out.print("➤ Novo Nome (deixe vazio para manter): ");
             String nome = scanner.nextLine();
-            clienteAtualizado.setNome(nome);
+            if (!nome.isBlank()) clienteExistente.setNome(nome);
 
-            System.out.print("➤ Novo Email: ");
+            System.out.print("➤ Novo Email (deixe vazio para manter): ");
             String email = scanner.nextLine();
-            clienteAtualizado.setEmail(email);
+            if (!email.isBlank()) clienteExistente.setEmail(email);
 
-            System.out.print("➤ Novo Telefone: ");
+            System.out.print("➤ Novo Telefone (deixe vazio para manter): ");
             String telefone = scanner.nextLine();
-            clienteAtualizado.setTelefone(telefone);
+            if (!telefone.isBlank()) clienteExistente.setTelefone(telefone);
 
-            System.out.print("➤ Novo Endereco: ");
+            System.out.print("➤ Novo Endereco (deixe vazio para manter): ");
             String endereco = scanner.nextLine();
-            clienteAtualizado.setEndereco(endereco);
+            if (!endereco.isBlank()) clienteExistente.setEndereco(endereco);
 
-            Cliente atualizado = clienteService.atualizarCliente(id, clienteAtualizado);
-            System.out.println("\n✓ Cliente atualizado com sucesso! ID: " + atualizado.getIdCliente());
+            Cliente atualizado = clienteService.atualizarCliente(cpf, clienteExistente);
+            System.out.println("\n✓ Cliente atualizado com sucesso! CPF: " + atualizado.getCpf());
             aguardarEnter();
 
         } catch (Exception e) {
@@ -302,6 +302,7 @@ public class ClienteMenu {
         }
     }
 
+
     private void deletar() {
         limparTela();
         System.out.println("\n╔════════════════════════════════════════╗");
@@ -309,15 +310,14 @@ public class ClienteMenu {
         System.out.println("╚════════════════════════════════════════╝\n");
 
         try {
-            System.out.print("➤ ID do Cliente: ");
-            Integer id = scanner.nextInt();
-            scanner.nextLine();
+            System.out.print("➤ CPF do Cliente: ");
+            String cpf = scanner.nextLine();
 
             System.out.print("\n⚠ Confirma a exclusao do cliente? (S/N): ");
             String confirmacao = scanner.nextLine().toUpperCase();
 
             if (confirmacao.equals("S")) {
-                clienteService.deletarCliente(id);
+                clienteService.deletarCliente(cpf);
                 System.out.println("\n✓ Cliente deletado com sucesso!");
             } else {
                 System.out.println("\n✗ Operacao cancelada");

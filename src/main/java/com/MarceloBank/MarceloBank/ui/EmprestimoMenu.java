@@ -69,8 +69,8 @@ public class EmprestimoMenu {
         System.out.println("╚════════════════════════════════════════╝\n");
 
         try {
-            System.out.print("➤ ID do Cliente: ");
-            Integer clienteId = scanner.nextInt();
+            System.out.print("➤ CPF do Cliente: ");
+            String cpf = scanner.nextLine();
 
             System.out.print("➤ Valor: R$ ");
             BigDecimal valor = scanner.nextBigDecimal();
@@ -91,7 +91,7 @@ public class EmprestimoMenu {
             }
 
             Emprestimo emprestimo = emprestimoService.solicitarEmprestimo(
-                    clienteId, valor, prazo
+                    cpf, valor, prazo
             );
 
             System.out.println("\n✓ Emprestimo solicitado!");
@@ -116,13 +116,13 @@ public class EmprestimoMenu {
         System.out.println("╚════════════════════════════════════════╝\n");
 
         try {
-            System.out.print("➤ ID do Cliente: ");
-            Integer clienteId = scanner.nextInt();
+            System.out.print("➤ CPF do Cliente: ");
+            String cpf = scanner.nextLine();
 
-            BigDecimal saldo = emprestimoService.getSaldoDevedorTotal(clienteId);
+            BigDecimal saldo = emprestimoService.getSaldoDevedorTotal(cpf);
 
             System.out.println("\n┌────────────────────────────────────────┐");
-            System.out.printf("│ Cliente: %-29d │\n", clienteId);
+            System.out.printf("│ Cliente: %-30s │\n", cpf);
             System.out.printf("│ Saldo Devedor: R$ %-19.2f │\n", saldo);
             System.out.println("└────────────────────────────────────────┘");
 

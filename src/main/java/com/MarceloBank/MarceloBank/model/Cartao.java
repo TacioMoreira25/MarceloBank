@@ -21,62 +21,6 @@ public class Cartao
     @Setter
     private Integer numeroCartao;
 
-    public Integer getNumeroCartao() {
-		return numeroCartao;
-	}
-
-	public void setNumeroCartao(Integer numeroCartao) {
-		this.numeroCartao = numeroCartao;
-	}
-
-	public TipoCartao getTipoCartao() {
-		return tipoCartao;
-	}
-
-	public void setTipoCartao(TipoCartao tipoCartao) {
-		this.tipoCartao = tipoCartao;
-	}
-
-	public Date getDataEmissao() {
-		return dataEmissao;
-	}
-
-	public void setDataEmissao(Date dataEmissao) {
-		this.dataEmissao = dataEmissao;
-	}
-
-	public Date getDataValidade() {
-		return dataValidade;
-	}
-
-	public void setDataValidade(Date dataValidade) {
-		this.dataValidade = dataValidade;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public BigDecimal getLimite() {
-		return limite;
-	}
-
-	public void setLimite(BigDecimal limite) {
-		this.limite = limite;
-	}
-
-	public Conta getConta() {
-		return conta;
-	}
-
-	public void setConta(Conta conta) {
-		this.conta = conta;
-	}
-
 	@Getter
     @Setter
     @Enumerated(EnumType.STRING)

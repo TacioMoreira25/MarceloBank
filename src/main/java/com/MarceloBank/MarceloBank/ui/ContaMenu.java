@@ -6,8 +6,10 @@ import com.MarceloBank.MarceloBank.model.Agencia;
 import com.MarceloBank.MarceloBank.model.Cartao;
 import com.MarceloBank.MarceloBank.model.Cliente;
 import com.MarceloBank.MarceloBank.model.Conta;
+import com.MarceloBank.MarceloBank.repository.ClienteRepository;
 import com.MarceloBank.MarceloBank.repository.ContaRepository;
 import com.MarceloBank.MarceloBank.service.CartaoService;
+import com.MarceloBank.MarceloBank.service.ClienteService;
 import com.MarceloBank.MarceloBank.service.ContaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,7 +30,12 @@ public class ContaMenu {
     private CartaoService cartaoService;
 
     @Autowired
+    private ClienteService clienteService;
+
+    @Autowired
     private ContaRepository contaRepository;
+    @Autowired
+    private ClienteRepository clienteRepository;
 
     public void exibir() {
         int opcao = -1;
@@ -90,9 +97,17 @@ public class ContaMenu {
         try {
             System.out.print("➤ Numero da Conta: ");
             Integer numeroConta = scanner.nextInt();
+            scanner.nextLine();
 
-            System.out.print("➤ ID do Cliente: ");
-            Integer clienteId = scanner.nextInt();
+            System.out.print("➤ CPF do Cliente: ");
+            String cpf = scanner.nextLine();
+
+            Cliente cliente = clienteService.getClientePorCpf(cpf);
+            if (cliente == null) {
+                System.err.println("\n✗ Erro: Cliente não encontrado. Cadastre o cliente primeiro.");
+                aguardarEnter();
+                return;
+            }
 
             System.out.print("➤ Codigo da Agencia: ");
             Integer agenciaId = scanner.nextInt();
@@ -105,8 +120,7 @@ public class ContaMenu {
             Conta conta = new Conta();
             conta.setNumeroConta(numeroConta);
 
-            Cliente cliente = new Cliente();
-            cliente.setIdCliente(clienteId);
+            cliente.setCpf(cpf);
             conta.setCliente(cliente);
 
             Agencia agencia = new Agencia();

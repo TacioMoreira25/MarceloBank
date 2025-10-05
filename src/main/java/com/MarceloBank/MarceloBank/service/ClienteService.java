@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -47,15 +46,14 @@ public class ClienteService {
     public List<Cliente> listarTodos() {
         return clienteRepository.findAll();
     }
-
-    public Optional<Cliente> buscarPorId(Integer id) {
-        return clienteRepository.findById
-                (id);
+    public Cliente getClientePorCpf(String cpf) {
+        return clienteRepository.findByCpf(cpf)
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
     }
 
-    public Cliente atualizarCliente(Integer id, Cliente clienteAtualizado)
+    public Cliente atualizarCliente(String cpf, Cliente clienteAtualizado)
     {
-        Cliente cliente = clienteRepository.findById(id)
+        Cliente cliente = clienteRepository.findByCpf(cpf)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
 
         cliente.setNome(clienteAtualizado.getNome());
@@ -66,18 +64,18 @@ public class ClienteService {
         return clienteRepository.save(cliente);
     }
 
-    public void deletarCliente(Integer id) {
-        clienteRepository.deleteById(id);
+    public void deletarCliente(String cpf) {
+        clienteRepository.deleteClienteByCpf(cpf);
     }
-    public Map<String, Object> getInfoCompletaCliente(Integer clienteId)
+
+    public Map<String, Object> getInfoCompletaCliente(String cpf)
     {
-        Cliente cliente = clienteRepository.findById(clienteId)
+        Cliente cliente = clienteRepository.findByCpf(cpf)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
 
-        List<Conta> contas = contaRepository.findByClienteIdCliente(clienteId);
-        List<Cartao> cartoes = cartaoRepository.findCartoesByClienteId(clienteId);
-        List<Emprestimo> emprestimos = emprestimoRepository.findByClienteIdCliente
-                (clienteId);
+        List<Conta> contas = contaRepository.findByClienteCpf(cpf);
+        List<Cartao> cartoes = cartaoRepository.findCartoesByClienteCpf(cpf);
+        List<Emprestimo> emprestimos = emprestimoRepository.findByClienteCpf(cpf);
 
         Map<String, Object> info = new HashMap<>();
         info.put("cliente", cliente);
