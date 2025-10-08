@@ -1,0 +1,34 @@
+package com.MarceloBank.MarceloBank.dto;
+
+import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.Date;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class CriarClienteDTO {
+    @NotBlank(message = "Nome é obrigatório")
+    @Size(min = 3, max = 100, message = "Nome deve ter entre 3 e 100 caracteres")
+    private String nome;
+
+    @NotBlank(message = "CPF é obrigatório")
+    @Pattern(regexp = "\\d{11}", message = "CPF deve ter 11 dígitos")
+    private String cpf;
+
+    @NotBlank(message = "Email é obrigatório")
+    @Email(message = "Email inválido")
+    private String email;
+
+    @NotBlank(message = "Telefone é obrigatório")
+    private String telefone;
+
+    @NotNull(message = "Data de nascimento é obrigatória")
+    private Date dataNascimento;
+
+    @NotBlank(message = "Endereço é obrigatório")
+    private String endereco;
+}

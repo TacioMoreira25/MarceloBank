@@ -2,9 +2,7 @@ package com.MarceloBank.MarceloBank.enums;
 
 public enum TipoConta {
     CORRENTE("Conta Corrente"),
-    POUPANCA("Conta Poupança"),
-    SALARIO("Conta Salário"),
-    INVESTIMENTO("Conta Investimento");
+    POUPANCA("Conta Poupança");
 
     private final String descricao;
 

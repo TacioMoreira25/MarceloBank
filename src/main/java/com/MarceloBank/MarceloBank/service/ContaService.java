@@ -24,8 +24,7 @@ public class ContaService {
         this.transacaoRepository = transacaoRepository;
     }
 
-    public Conta criarConta(Conta conta)
-    {
+    public Conta criarConta(Conta conta) {
         conta.setDataAbertura(new Date());
         conta.setStatus("ATIVA");
         if (conta.getSaldo() == null) {
@@ -34,8 +33,16 @@ public class ContaService {
         return contaRepository.save(conta);
     }
 
-    public void depositar(Integer numeroConta, BigDecimal valor)
-    {
+    private void validarPin(Integer numeroConta, String pin) {
+        Conta conta = contaRepository.findById(numeroConta)
+                .orElseThrow(() -> new RuntimeException("Conta não encontrada"));
+
+        if (!conta.getPin().equals(pin)) {
+            throw new RuntimeException("PIN incorreto");
+        }
+    }
+
+    public void depositar(Integer numeroConta, BigDecimal valor) {
         Conta conta = contaRepository.findById(numeroConta)
                 .orElseThrow(() -> new RuntimeException("Conta não encontrada"));
 
@@ -45,8 +52,9 @@ public class ContaService {
         registrarTransacao(null, conta, valor, "DEPÓSITO");
     }
 
-    public void sacar(Integer numeroConta, BigDecimal valor)
-    {
+    public void sacar(Integer numeroConta, BigDecimal valor, String pin) {
+        validarPin(numeroConta, pin);
+
         Conta conta = contaRepository.findById(numeroConta)
                 .orElseThrow(() -> new RuntimeException("Conta não encontrada"));
 
@@ -61,14 +69,24 @@ public class ContaService {
     }
 
     @Transactional
-    public void transferir(Integer contaOrigem, Integer contaDestino, BigDecimal valor)
-    {
-        sacar(contaOrigem, valor);
-        depositar(contaDestino, valor);
+    public void transferir(Integer contaOrigem, Integer contaDestino, BigDecimal valor, String pin) {
+        validarPin(contaOrigem, pin);
 
-        // Registra a transferência completa
-        Conta origem = contaRepository.findById(contaOrigem).orElseThrow();
-        Conta destino = contaRepository.findById(contaDestino).orElseThrow();
+        Conta origem = contaRepository.findById(contaOrigem)
+                .orElseThrow(() -> new RuntimeException("Conta origem não encontrada"));
+
+        if (origem.getSaldo().compareTo(valor) < 0) {
+            throw new RuntimeException("Saldo insuficiente");
+        }
+
+        Conta destino = contaRepository.findById(contaDestino)
+                .orElseThrow(() -> new RuntimeException("Conta destino não encontrada"));
+
+        origem.setSaldo(origem.getSaldo().subtract(valor));
+        destino.setSaldo(destino.getSaldo().add(valor));
+
+        contaRepository.save(origem);
+        contaRepository.save(destino);
 
         Transacao transacao = new Transacao();
         transacao.setContaOrigem(origem);
@@ -84,8 +102,7 @@ public class ContaService {
     }
 
     private void registrarTransacao(Conta origem, Conta destino, BigDecimal valor,
-                                    String tipo)
-    {
+                                    String tipo) {
         Transacao transacao = new Transacao();
         transacao.setContaOrigem(origem);
         transacao.setContaDestino(destino);
@@ -98,8 +115,7 @@ public class ContaService {
         transacaoRepository.save(transacao);
     }
 
-    public Conta buscarContaPorNumero(Integer numeroConta)
-    {
+    public Conta buscarContaPorNumero(Integer numeroConta) {
         return contaRepository.findById(numeroConta)
                 .orElseThrow(() -> new RuntimeException("Conta não encontrada: " +
                         numeroConta));

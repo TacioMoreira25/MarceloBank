@@ -15,8 +15,7 @@ import java.util.List;
 @Table(name = "conta")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Conta
-{
+public class Conta {
     @Id
     @Getter
     @Setter
@@ -28,11 +27,12 @@ public class Conta
     @Setter
     private Agencia agencia;
 
-	@Getter
+    @Getter
     @Setter
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_conta")
     private TipoConta tipoConta;
+
     @Getter
     @Setter
     @Column(precision = 15, scale = 2)
@@ -46,6 +46,11 @@ public class Conta
     @Getter
     @Setter
     private String status;
+
+    @Getter
+    @Setter
+    @Column(length = 4)
+    private Integer pin;
 
     @ManyToOne
     @JoinColumn(name = "id_cliente")

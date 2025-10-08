@@ -3,8 +3,6 @@ package com.MarceloBank.MarceloBank.enums;
 public enum TipoCartao {
     CREDITO("Crédito"),
     DEBITO("Débito"),
-    CREDITO_DEBITO("Crédito e Débito"),
-    VIRTUAL("Virtual"),
     PRE_PAGO("Pré-pago");
 
     private final String descricao;
@@ -16,6 +14,7 @@ public enum TipoCartao {
     public String getDescricao() {
         return descricao;
     }
+
     public static TipoCartao fromString(String texto) {
         for (TipoCartao tipo : TipoCartao.values()) {
             if (tipo.name().equalsIgnoreCase(texto)) {
