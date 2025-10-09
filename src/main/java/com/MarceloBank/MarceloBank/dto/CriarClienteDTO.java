@@ -1,5 +1,6 @@
 package com.MarceloBank.MarceloBank.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,6 +28,7 @@ public class CriarClienteDTO {
     private String telefone;
 
     @NotNull(message = "Data de nascimento é obrigatória")
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private Date dataNascimento;
 
     @NotBlank(message = "Endereço é obrigatório")
