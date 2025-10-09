@@ -1,24 +1,16 @@
 package com.MarceloBank.MarceloBank.service;
 
-import com.MarceloBank.MarceloBank.model.Cartao;
-import com.MarceloBank.MarceloBank.model.Cliente;
-import com.MarceloBank.MarceloBank.model.Conta;
-import com.MarceloBank.MarceloBank.model.Emprestimo;
-import com.MarceloBank.MarceloBank.repository.CartaoRepository;
-import com.MarceloBank.MarceloBank.repository.ClienteRepository;
-import com.MarceloBank.MarceloBank.repository.ContaRepository;
-import com.MarceloBank.MarceloBank.repository.EmprestimoRepository;
+import com.MarceloBank.MarceloBank.model.*;
+import com.MarceloBank.MarceloBank.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Transactional
-public class ClienteService {
-
+public class ClienteService
+{
     private final ClienteRepository clienteRepository;
     private final ContaRepository contaRepository;
     private final EmprestimoRepository emprestimoRepository;
@@ -35,15 +27,16 @@ public class ClienteService {
         this.emprestimoRepository = emprestimoRepository;
     }
 
-    public Cliente criarCliente(Cliente cliente) {
-        // Valida se CPF já existe
+    public Cliente criarCliente(Cliente cliente)
+    {
         if (clienteRepository.findByCpf(cliente.getCpf()).isPresent()) {
             throw new RuntimeException("CPF já cadastrado: " + cliente.getCpf());
         }
         return clienteRepository.save(cliente);
     }
 
-    public List<Cliente> listarTodos() {
+    public List<Cliente> listarTodos()
+    {
         return clienteRepository.findAll();
     }
     public Cliente getClientePorCpf(String cpf) {

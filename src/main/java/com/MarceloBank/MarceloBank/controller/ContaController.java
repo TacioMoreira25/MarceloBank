@@ -1,18 +1,15 @@
 package com.MarceloBank.MarceloBank.controller;
 
-import com.MarceloBank.MarceloBank.dto.ContaDTO;
-import com.MarceloBank.MarceloBank.dto.TransferenciaDTO;
+import com.MarceloBank.MarceloBank.dto.*;
 import com.MarceloBank.MarceloBank.model.Conta;
 import com.MarceloBank.MarceloBank.repository.ContaRepository;
 import com.MarceloBank.MarceloBank.service.ContaService;
+import com.MarceloBank.MarceloBank.mapper.ContaMapper;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/contas")
@@ -21,42 +18,46 @@ public class ContaController {
 
     private final ContaService contaService;
     private final ContaRepository contaRepository;
+    private final ContaMapper contaMapper;
 
-    public ContaController(ContaService contaService, ContaRepository contaRepository) {
+    public ContaController(ContaService contaService, ContaRepository contaRepository,
+                           ContaMapper contaMapper) {
         this.contaService = contaService;
         this.contaRepository = contaRepository;
+        this.contaMapper = contaMapper;
     }
 
     @PostMapping
-    public ResponseEntity<Conta> criarConta(@RequestBody Conta conta) {
+    public ResponseEntity<?> criarConta(@Valid @RequestBody CriarContaDTO dto) {
         try {
-            Conta novaConta = contaService.criarConta(conta);
-            return ResponseEntity.status(HttpStatus.CREATED).body(novaConta);
+            Conta novaConta = contaService.criarConta(dto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(contaMapper.toDTO(novaConta));
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("erro", e.getMessage()));
         }
     }
 
     @GetMapping
-    public ResponseEntity<List<Conta>> listarTodas() {
+    public ResponseEntity<List<ContaResponseDTO>> listarTodas() {
         List<Conta> contas = contaRepository.findAll();
-        return ResponseEntity.ok(contas);
+        return ResponseEntity.ok(contaMapper.toDTOList(contas));
     }
 
     @GetMapping("/{numeroConta}")
-    public ResponseEntity<Conta> buscarPorNumero(@PathVariable Integer numeroConta) {
+    public ResponseEntity<ContaResponseDTO> buscarPorNumero(@PathVariable Integer numeroConta) {
         try {
             Conta conta = contaService.buscarContaPorNumero(numeroConta);
-            return ResponseEntity.ok(conta);
+            return ResponseEntity.ok(contaMapper.toDTO(conta));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
     @GetMapping("/cliente/{cpf}")
-    public ResponseEntity<List<Conta>> listarPorCliente(@PathVariable String cpf) {
+    public ResponseEntity<List<ContaResponseDTO>> listarPorCliente(@PathVariable String cpf) {
         List<Conta> contas = contaRepository.findByClienteCpf(cpf);
-        return ResponseEntity.ok(contas);
+        return ResponseEntity.ok(contaMapper.toDTOList(contas));
     }
 
     @GetMapping("/{numeroConta}/saldo")
@@ -78,7 +79,7 @@ public class ContaController {
     @PostMapping("/{numeroConta}/deposito")
     public ResponseEntity<Map<String, String>> depositar(
             @PathVariable Integer numeroConta,
-            @Valid @RequestBody ContaDTO request) {
+            @Valid @RequestBody DepositoDTO request) {
         try {
             BigDecimal valor = request.getValor();
             contaService.depositar(numeroConta, valor);
@@ -95,7 +96,7 @@ public class ContaController {
     @PostMapping("/{numeroConta}/saque")
     public ResponseEntity<Map<String, String>> sacar(
             @PathVariable Integer numeroConta,
-            @Valid @RequestBody ContaDTO request) {
+            @Valid @RequestBody OperacaoValorDTO request) {
         try {
             BigDecimal valor = request.getValor();
             String pin = request.getPin();

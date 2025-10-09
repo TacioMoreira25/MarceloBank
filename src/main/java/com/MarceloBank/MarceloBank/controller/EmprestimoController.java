@@ -3,13 +3,11 @@ package com.MarceloBank.MarceloBank.controller;
 import com.MarceloBank.MarceloBank.model.Emprestimo;
 import com.MarceloBank.MarceloBank.repository.EmprestimoRepository;
 import com.MarceloBank.MarceloBank.service.EmprestimoService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/emprestimos")

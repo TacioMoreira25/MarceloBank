@@ -7,6 +7,5 @@ import java.util.List;
 
 public interface ContaRepository extends JpaRepository<Conta, Integer>
 {
-
     List<Conta> findByClienteCpf(String cpf);
 }

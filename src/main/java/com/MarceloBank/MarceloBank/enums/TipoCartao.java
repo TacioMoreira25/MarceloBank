@@ -10,17 +10,4 @@ public enum TipoCartao {
     TipoCartao(String descricao) {
         this.descricao = descricao;
     }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public static TipoCartao fromString(String texto) {
-        for (TipoCartao tipo : TipoCartao.values()) {
-            if (tipo.name().equalsIgnoreCase(texto)) {
-                return tipo;
-            }
-        }
-        throw new IllegalArgumentException("Tipo de cartão inválido: " + texto);
-    }
 }

@@ -2,14 +2,9 @@ package com.MarceloBank.MarceloBank.model;
 
 import com.MarceloBank.MarceloBank.enums.TipoConta;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+import lombok.*;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "conta")
@@ -50,7 +45,7 @@ public class Conta {
     @Getter
     @Setter
     @Column(length = 4)
-    private Integer pin;
+    private String pin;
 
     @ManyToOne
     @JoinColumn(name = "id_cliente")

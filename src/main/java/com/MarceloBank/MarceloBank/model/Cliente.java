@@ -1,13 +1,8 @@
 package com.MarceloBank.MarceloBank.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.util.Date;
-import java.util.List;
+import lombok.*;
+import java.util.*;
 
 @Entity
 @Table(name = "cliente")

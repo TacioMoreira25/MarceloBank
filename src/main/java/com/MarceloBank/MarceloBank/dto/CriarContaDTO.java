@@ -1,29 +1,32 @@
 package com.MarceloBank.MarceloBank.dto;
 
 import com.MarceloBank.MarceloBank.enums.TipoConta;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import jakarta.validation.constraints.*;
-
 import java.math.BigDecimal;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class CriarContaDTO {
-    @NotNull(message = "Número da conta é obrigatório")
-    private Integer numeroConta;
 
-    @NotBlank(message = "CPF do cliente é obrigatório")
+    @NotBlank(message = "CPF é obrigatório")
     private String cpf;
-
-    @NotNull(message = "Código da agência é obrigatório")
-    private Integer codigoAgencia;
 
     @NotNull(message = "Tipo de conta é obrigatório")
     private TipoConta tipoConta;
 
-    @Min(value = 0, message = "Saldo inicial não pode ser negativo")
+    @NotBlank(message = "PIN é obrigatório")
+    @Pattern(regexp = "\\d{4}", message = "PIN deve conter exatamente 4 dígitos")
+    private String pin;
+
+    @PositiveOrZero(message = "Saldo inicial não pode ser negativo")
     private BigDecimal saldoInicial;
+
+    public String getCpf() { return cpf; }
+    public TipoConta getTipoConta() { return tipoConta; }
+    public String getPin() { return pin; }
+    public BigDecimal getSaldoInicial() { return saldoInicial; }
+
+    // Setters para desserialização
+    public void setCpf(String cpf) { this.cpf = cpf; }
+    public void setTipoConta(TipoConta tipoConta) { this.tipoConta = tipoConta; }
+    public void setPin(String pin) { this.pin = pin; }
+    public void setSaldoInicial(BigDecimal saldoInicial) { this.saldoInicial = saldoInicial; }
 }

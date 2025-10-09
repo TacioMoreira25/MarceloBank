@@ -1,8 +1,6 @@
 package com.MarceloBank.MarceloBank.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
 
 public class TransferenciaDTO {
@@ -22,7 +20,9 @@ public class TransferenciaDTO {
 
     public TransferenciaDTO() {}
 
-    public TransferenciaDTO(Integer contaOrigem, Integer contaDestino, BigDecimal valor, String pin) {
+    public TransferenciaDTO(Integer contaOrigem, Integer contaDestino, BigDecimal valor,
+                            String pin)
+    {
         this.contaOrigem = contaOrigem;
         this.contaDestino = contaDestino;
         this.valor = valor;
@@ -33,31 +33,15 @@ public class TransferenciaDTO {
         return contaOrigem;
     }
 
-    public void setContaOrigem(Integer contaOrigem) {
-        this.contaOrigem = contaOrigem;
-    }
-
     public Integer getContaDestino() {
         return contaDestino;
-    }
-
-    public void setContaDestino(Integer contaDestino) {
-        this.contaDestino = contaDestino;
     }
 
     public BigDecimal getValor() {
         return valor;
     }
 
-    public void setValor(BigDecimal valor) {
-        this.valor = valor;
-    }
-
     public String getPin() {
         return pin;
-    }
-
-    public void setPin(String pin) {
-        this.pin = pin;
     }
 }

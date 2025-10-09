@@ -4,14 +4,13 @@ import com.MarceloBank.MarceloBank.model.Transacao;
 import com.MarceloBank.MarceloBank.repository.TransacaoRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/transacoes")
 @CrossOrigin(origins = "*")
-public class TransacaoController {
-
+public class TransacaoController
+{
     private final TransacaoRepository transacaoRepository;
 
     public TransacaoController(TransacaoRepository transacaoRepository) {

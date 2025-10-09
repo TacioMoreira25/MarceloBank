@@ -2,13 +2,9 @@ package com.MarceloBank.MarceloBank.model;
 
 import com.MarceloBank.MarceloBank.enums.StatusEmprestimo;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+import lombok.*;
+import java.util.*;
 import java.math.BigDecimal;
-import java.util.Date;
 
 @Entity
 @Table(name = "emprestimo")

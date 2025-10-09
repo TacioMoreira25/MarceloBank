@@ -4,13 +4,10 @@ import com.MarceloBank.MarceloBank.enums.TipoCartao;
 import com.MarceloBank.MarceloBank.model.Cartao;
 import com.MarceloBank.MarceloBank.repository.CartaoRepository;
 import com.MarceloBank.MarceloBank.service.CartaoService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/cartoes")
@@ -26,14 +23,16 @@ public class CartaoController {
     }
 
     @PostMapping
-    public ResponseEntity<Cartao> emitirCartao(@RequestBody Map<String, Object> request) {
+    public ResponseEntity<Cartao> emitirCartao(@RequestBody Map<String, Object> request)
+    {
         try {
             Integer numeroCartao = (Integer) request.get("numeroCartao");
             Integer numeroConta = (Integer) request.get("numeroConta");
             TipoCartao tipoCartao = TipoCartao.valueOf((String) request.get("tipoCartao"));
             BigDecimal limite = new BigDecimal(request.get("limite").toString());
 
-            Cartao cartao = cartaoService.emitirCartao(numeroCartao, numeroConta, tipoCartao, limite);
+            Cartao cartao = cartaoService.emitirCartao(numeroCartao, numeroConta, tipoCartao,
+                    limite);
             return ResponseEntity.status(HttpStatus.CREATED).body(cartao);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

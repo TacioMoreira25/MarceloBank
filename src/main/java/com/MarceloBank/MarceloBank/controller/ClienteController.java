@@ -5,12 +5,10 @@ import com.MarceloBank.MarceloBank.mapper.ClienteMapper;
 import com.MarceloBank.MarceloBank.model.Cliente;
 import com.MarceloBank.MarceloBank.service.ClienteService;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -21,14 +19,16 @@ public class ClienteController {
     private final ClienteService clienteService;
     private final ClienteMapper clienteMapper;
 
-    public ClienteController(ClienteService clienteService, ClienteMapper clienteMapper) {
+    public ClienteController(ClienteService clienteService, ClienteMapper clienteMapper)
+    {
         this.clienteService = clienteService;
         this.clienteMapper = clienteMapper;
     }
 
     @PostMapping
     public ResponseEntity<ClienteResponseDTO> criarCliente(
-            @Valid @RequestBody CriarClienteDTO dto) {
+            @Valid @RequestBody CriarClienteDTO dto)
+    {
         // Converte DTO para entidade
         Cliente cliente = clienteMapper.toEntity(dto);
 
@@ -45,7 +45,6 @@ public class ClienteController {
     public ResponseEntity<List<ClienteResponseDTO>> listarTodos() {
         List<Cliente> clientes = clienteService.listarTodos();
 
-        // Converte lista de entidades para lista de DTOs
         List<ClienteResponseDTO> response = clientes.stream()
                 .map(clienteMapper::toDTO)
                 .collect(Collectors.toList());

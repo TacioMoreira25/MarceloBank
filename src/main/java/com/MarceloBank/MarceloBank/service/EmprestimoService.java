@@ -1,18 +1,12 @@
 package com.MarceloBank.MarceloBank.service;
 
 import com.MarceloBank.MarceloBank.enums.StatusEmprestimo;
-import com.MarceloBank.MarceloBank.model.Cliente;
-import com.MarceloBank.MarceloBank.model.Conta;
-import com.MarceloBank.MarceloBank.model.Emprestimo;
-import com.MarceloBank.MarceloBank.repository.ClienteRepository;
-import com.MarceloBank.MarceloBank.repository.ContaRepository;
-import com.MarceloBank.MarceloBank.repository.EmprestimoRepository;
+import com.MarceloBank.MarceloBank.model.*;
+import com.MarceloBank.MarceloBank.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Transactional
