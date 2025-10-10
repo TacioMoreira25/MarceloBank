@@ -36,7 +36,7 @@ public class EmprestimoService {
         emprestimo.setPrazoMeses(prazoMeses);
         emprestimo.setDataSolicitacao(new Date());
         emprestimo.setStatus(StatusEmprestimo.SOLICITADO);
-        emprestimo.setTaxaJuros(new BigDecimal("1.5")); // Taxa fixa exemplo
+        emprestimo.setTaxaJuros(new BigDecimal("4.5"));
 
         return emprestimoRepository.save(emprestimo);
     }

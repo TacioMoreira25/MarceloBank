@@ -57,10 +57,20 @@ public class CartaoController {
         return ResponseEntity.ok(dtos);
     }
 
-    @PatchMapping("/{numeroCartao}/bloquear")
-    public ResponseEntity<Cartao> bloquearCartao(@PathVariable Integer numeroCartao) {
+    @PatchMapping("/{numeroCartao}/status")
+    public ResponseEntity<Cartao> alterarStatusCartao(@PathVariable Integer numeroCartao,
+                                                      @RequestBody Map<String, String> request)
+    {
         try {
-            Cartao cartao = cartaoService.bloquearCartao(numeroCartao);
+            String acao = request.get("acao");
+            Cartao cartao;
+            if ("bloquear".equalsIgnoreCase(acao)) {
+                cartao = cartaoService.bloquearCartao(numeroCartao);
+            } else if ("desbloquear".equalsIgnoreCase(acao)) {
+                cartao = cartaoService.desbloquearCartao(numeroCartao);
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
             return ResponseEntity.ok(cartao);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

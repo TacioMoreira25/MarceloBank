@@ -18,8 +18,11 @@ public class Agencia
 
     @Getter
     private String nomeAgencia;
+    @Getter
     private String endereco;
+    @Getter
     private String telefone;
+    @Getter
     private String gerente;
 
     @OneToMany(mappedBy = "agencia")

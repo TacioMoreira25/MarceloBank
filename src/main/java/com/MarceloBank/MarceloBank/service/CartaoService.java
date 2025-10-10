@@ -52,4 +52,11 @@ public class CartaoService
         cartao.setStatus("BLOQUEADO");
         return cartaoRepository.save(cartao);
     }
+
+    public Cartao desbloquearCartao(Integer numeroCartao) {
+        Cartao cartao = cartaoRepository.findById(numeroCartao)
+                .orElseThrow(() -> new RuntimeException("Cartão não encontrado"));
+        cartao.setStatus("ATIVO");
+        return cartaoRepository.save(cartao);
+    }
 }
