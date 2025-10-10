@@ -1,5 +1,6 @@
 package com.MarceloBank.MarceloBank.controller;
 
+import com.MarceloBank.MarceloBank.dto.CartaoResponseDTO;
 import com.MarceloBank.MarceloBank.enums.TipoCartao;
 import com.MarceloBank.MarceloBank.model.Cartao;
 import com.MarceloBank.MarceloBank.repository.CartaoRepository;
@@ -17,7 +18,8 @@ public class CartaoController {
     private final CartaoService cartaoService;
     private final CartaoRepository cartaoRepository;
 
-    public CartaoController(CartaoService cartaoService, CartaoRepository cartaoRepository) {
+    public CartaoController(CartaoService cartaoService, CartaoRepository cartaoRepository)
+    {
         this.cartaoService = cartaoService;
         this.cartaoRepository = cartaoRepository;
     }
@@ -40,9 +42,19 @@ public class CartaoController {
     }
 
     @GetMapping("/{cpf}")
-    public ResponseEntity<List<Cartao>> listarPorCpf(String cpf) {
+    public ResponseEntity<List<CartaoResponseDTO>> listarPorCpf(@PathVariable String cpf) {
         List<Cartao> cartoes = cartaoRepository.findCartoesByClienteCpf(cpf);
-        return ResponseEntity.ok(cartoes);
+        List<CartaoResponseDTO> dtos = cartoes.stream()
+            .map(c -> new CartaoResponseDTO(
+                c.getNumeroCartao(),
+                c.getTipoCartao(),
+                c.getDataEmissao(),
+                c.getDataValidade(),
+                c.getStatus(),
+                c.getLimite()
+            ))
+            .toList();
+        return ResponseEntity.ok(dtos);
     }
 
     @PatchMapping("/{numeroCartao}/bloquear")

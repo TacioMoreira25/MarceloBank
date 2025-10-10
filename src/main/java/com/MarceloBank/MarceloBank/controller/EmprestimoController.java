@@ -1,5 +1,6 @@
 package com.MarceloBank.MarceloBank.controller;
 
+import com.MarceloBank.MarceloBank.dto.EmprestimoResponseDTO;
 import com.MarceloBank.MarceloBank.model.Emprestimo;
 import com.MarceloBank.MarceloBank.repository.EmprestimoRepository;
 import com.MarceloBank.MarceloBank.service.EmprestimoService;
@@ -53,9 +54,20 @@ public class EmprestimoController {
     }
 
     @GetMapping("/cliente/{cpf}")
-    public ResponseEntity<List<Emprestimo>> listarPorCliente(@PathVariable String cpf) {
+    public ResponseEntity<List<EmprestimoResponseDTO>> listarPorCliente(@PathVariable String cpf) {
         List<Emprestimo> emprestimos = emprestimoRepository.findByClienteCpf(cpf);
-        return ResponseEntity.ok(emprestimos);
+        List<EmprestimoResponseDTO> dtos = emprestimos.stream()
+            .map(e -> new EmprestimoResponseDTO(
+                e.getIdEmprestimo(),
+                e.getValorSolicitado(),
+                e.getValorAprovado(),
+                e.getPrazoMeses(),
+                e.getStatus(),
+                e.getDataSolicitacao(),
+                e.getSaldoDevedor()
+            ))
+            .toList();
+        return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/cliente/{cpf}/saldo-devedor")

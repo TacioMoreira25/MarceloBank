@@ -2,6 +2,7 @@ package com.MarceloBank.MarceloBank.controller;
 
 import com.MarceloBank.MarceloBank.model.Transacao;
 import com.MarceloBank.MarceloBank.repository.TransacaoRepository;
+import com.MarceloBank.MarceloBank.dto.TransacaoResponseDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -24,9 +25,18 @@ public class TransacaoController
     }
 
     @GetMapping("/conta/{numeroConta}")
-    public ResponseEntity<List<Transacao>> listarPorConta(@PathVariable Integer numeroConta) {
+    public ResponseEntity<List<TransacaoResponseDTO>> listarPorConta(@PathVariable Integer numeroConta) {
         List<Transacao> transacoes = transacaoRepository.findTransacoesByConta(numeroConta);
-        return ResponseEntity.ok(transacoes);
+        List<TransacaoResponseDTO> dtos = transacoes.stream()
+            .map(t -> new TransacaoResponseDTO(
+                t.getIdTransacao(),
+                t.getTipoTransacao(),
+                t.getValor(),
+                t.getStatus(),
+                t.getDataTransacao()
+            ))
+            .toList();
+        return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/{id}")
