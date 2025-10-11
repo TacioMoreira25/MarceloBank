@@ -29,13 +29,10 @@ public class ClienteController {
     public ResponseEntity<ClienteResponseDTO> criarCliente(
             @Valid @RequestBody CriarClienteDTO dto)
     {
-        // Converte DTO para entidade
         Cliente cliente = clienteMapper.toEntity(dto);
 
-        // Salva no banco
         Cliente clienteSalvo = clienteService.criarCliente(cliente);
 
-        // Converte entidade para DTO de resposta
         ClienteResponseDTO response = clienteMapper.toDTO(clienteSalvo);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -70,29 +67,28 @@ public class ClienteController {
             @PathVariable String cpf,
             @Valid @RequestBody AtualizarClienteDTO dto) {
 
-        // Busca cliente existente
         Cliente cliente = clienteService.getClientePorCpf(cpf);
 
-        // Atualiza apenas os campos enviados
         clienteMapper.updateEntity(cliente, dto);
 
-        // Salva alterações
         Cliente clienteAtualizado = clienteService.atualizarCliente(cpf, cliente);
 
-        // Retorna DTO
         ClienteResponseDTO response = clienteMapper.toDTO(clienteAtualizado);
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/cpf/{cpf}")
-    public ResponseEntity<SuccessResponseDTO> deletarCliente(@PathVariable String cpf) {
-        clienteService.deletarCliente(cpf);
-
-        SuccessResponseDTO response = new SuccessResponseDTO(
-                "Cliente deletado com sucesso",
-                Map.of("cpf", cpf)
-        );
-
-        return ResponseEntity.ok(response);
+    public ResponseEntity<?> deletarCliente(@PathVariable String cpf) {
+        try {
+            clienteService.deletarCliente(cpf);
+            SuccessResponseDTO response = new SuccessResponseDTO(
+                    "Cliente deletado com sucesso",
+                    Map.of("cpf", cpf)
+            );
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new ErrorResponseDTO(e.getMessage(), HttpStatus.CONFLICT.value()));
+        }
     }
 }

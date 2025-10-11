@@ -21,7 +21,11 @@ public class LoginController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginDTO loginDTO) {
         try {
-            Conta conta = contaService.autenticar(loginDTO.getCpf(), loginDTO.getPin());
+            Conta conta = contaService.autenticar(
+                    loginDTO.getCpf(),
+                    loginDTO.getPin(),
+                    loginDTO.getNumeroConta()
+            );
 
             if (!"ATIVA".equals(conta.getStatus())) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)

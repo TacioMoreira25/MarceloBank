@@ -9,7 +9,8 @@ public class AgenciaResponseDTO {
 
     public AgenciaResponseDTO() {}
 
-    public AgenciaResponseDTO(Integer codigoAgencia, String nomeAgencia, String endereco, String telefone, String gerente) {
+    public AgenciaResponseDTO(Integer codigoAgencia, String nomeAgencia, String endereco,
+                              String telefone, String gerente) {
         this.codigoAgencia = codigoAgencia;
         this.nomeAgencia = nomeAgencia;
         this.endereco = endereco;

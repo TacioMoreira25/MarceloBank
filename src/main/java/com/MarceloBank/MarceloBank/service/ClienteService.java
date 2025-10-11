@@ -58,7 +58,15 @@ public class ClienteService
     }
 
     public void deletarCliente(String cpf) {
-        clienteRepository.deleteClienteByCpf(cpf);
+        Cliente cliente = clienteRepository.findByCpf(cpf)
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+
+        List<Conta> contas = contaRepository.findByClienteCpf(cpf);
+        if (!contas.isEmpty()) {
+            throw new RuntimeException("Não é possível deletar o cliente," +
+                    " pois existem contas associadas.");
+        }
+        clienteRepository.delete(cliente);
     }
 
     public Map<String, Object> getInfoCompletaCliente(String cpf)

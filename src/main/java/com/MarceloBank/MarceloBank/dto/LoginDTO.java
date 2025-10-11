@@ -12,6 +12,8 @@ public class LoginDTO {
     @Pattern(regexp = "\\d{4}", message = "PIN deve conter exatamente 4 dígitos")
     private String pin;
 
+    private Integer numeroConta;
+
     public LoginDTO() {}
 
     public LoginDTO(String cpf, String pin) {
@@ -33,5 +35,13 @@ public class LoginDTO {
 
     public void setPin(String pin) {
         this.pin = pin;
+    }
+
+    public Integer getNumeroConta() {
+        return numeroConta;
+    }
+
+    public void setNumeroConta(Integer numeroConta) {
+        this.numeroConta = numeroConta;
     }
 }

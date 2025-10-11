@@ -25,10 +25,12 @@ public class EmprestimoController {
     }
 
     @PostMapping
-    public ResponseEntity<Emprestimo> solicitarEmprestimo(@RequestBody Map<String, Object> request) {
+    public ResponseEntity<Emprestimo> solicitarEmprestimo(@RequestBody Map<String,
+            Object> request) {
         try {
             String cpf = (String) request.get("cpf");
-            BigDecimal valorSolicitado = new BigDecimal(request.get("valorSolicitado").toString());
+            BigDecimal valorSolicitado = new BigDecimal(request.get("valorSolicitado").
+                    toString());
             Integer prazoMeses = (Integer) request.get("prazoMeses");
 
             Emprestimo emprestimo = emprestimoService.solicitarEmprestimo(

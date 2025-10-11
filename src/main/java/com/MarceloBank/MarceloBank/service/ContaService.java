@@ -56,9 +56,8 @@ public class ContaService
     }
 
     private Integer generateNumeroConta() {
-        // Gera número de 1 até 999999 (máx 6 dígitos) garantindo unicidade
         for (int i = 0; i < 30; i++) {
-            int numero = random.nextInt(999999) + 1; // 1..999999
+            int numero = random.nextInt(999999) + 1;
             if (!contaRepository.existsById(numero)) {
                 return numero;
             }
@@ -67,18 +66,37 @@ public class ContaService
                 "ente novamente.");
     }
 
-    public Conta autenticar(String cpf, String pin)
+    public Conta autenticar(String cpf, String pin) {
+        return autenticar(cpf, pin, null);
+    }
+
+    public Conta autenticar(String cpf, String pin, Integer numeroConta)
     {
+        if (numeroConta != null) {
+            Conta conta = contaRepository.findById(numeroConta)
+                    .orElseThrow(() -> new RuntimeException("Conta não encontrada"));
+
+            if (conta.getCliente() == null || !cpf.equals(conta.getCliente().getCpf())) {
+                throw new RuntimeException("CPF não corresponde à conta");
+            }
+
+            if (conta.getPin() == null || !conta.getPin().equals(pin)) {
+                throw new RuntimeException("PIN incorreto");
+            }
+            return conta;
+        }
+
         List<Conta> contas = contaRepository.findByClienteCpf(cpf);
         if (contas.isEmpty()) {
             throw new RuntimeException("Cliente não encontrado");
         }
-        Conta conta = contas.get(0);
 
-        if (conta.getPin() == null || !conta.getPin().equals(pin)) {
-            throw new RuntimeException("PIN incorreto");
+        for (Conta c : contas) {
+            if (c.getPin() != null && c.getPin().equals(pin)) {
+                return c;
+            }
         }
-        return conta;
+        throw new RuntimeException("PIN incorreto");
     }
     private void validarPin(Integer numeroConta, String pin) {
 
@@ -195,5 +213,21 @@ public class ContaService
             throw new RuntimeException("Nenhuma conta encontrada para este CPF");
         }
         return contas;
+    }
+
+    public void deletarConta(Integer numeroConta) {
+        Conta conta = contaRepository.findById(numeroConta)
+            .orElseThrow(() -> new RuntimeException("Conta não encontrada"));
+
+        if (!transacaoRepository.findTransacoesByConta(numeroConta).isEmpty()) {
+            throw new RuntimeException("Não é possível deletar a conta: existem transações vinculadas.");
+        }
+
+        boolean possuiCartoes = conta.getCartoes() != null && !conta.getCartoes().isEmpty();
+        if (possuiCartoes) {
+            throw new RuntimeException("Não é possível deletar a conta: existem cartões vinculados.");
+        }
+
+        contaRepository.delete(conta);
     }
 }

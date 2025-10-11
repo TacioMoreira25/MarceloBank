@@ -17,12 +17,16 @@ public class Agencia
     private Integer codigoAgencia;
 
     @Getter
+    @Setter
     private String nomeAgencia;
     @Getter
+    @Setter
     private String endereco;
     @Getter
+    @Setter
     private String telefone;
     @Getter
+    @Setter
     private String gerente;
 
     @OneToMany(mappedBy = "agencia")

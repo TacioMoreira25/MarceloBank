@@ -132,4 +132,26 @@ public class ContaController {
                     .body(Map.of("erro", e.getMessage()));
         }
     }
+
+    @DeleteMapping("/{numeroConta}")
+    public ResponseEntity<?> deletarConta(@PathVariable Integer numeroConta) {
+        try {
+            contaService.deletarConta(numeroConta);
+            SuccessResponseDTO response = new SuccessResponseDTO(
+                "Conta deletada com sucesso",
+                Map.of("numeroConta", numeroConta)
+            );
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            String msg = e.getMessage();
+            if (msg != null && (msg.contains("transações vinculadas") ||
+                    msg.contains("cartões vinculados"))) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new ErrorResponseDTO(msg, HttpStatus.CONFLICT.value()));
+            }
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponseDTO(msg != null ? msg :
+                        "Conta não encontrada", HttpStatus.NOT_FOUND.value()));
+        }
+    }
 }

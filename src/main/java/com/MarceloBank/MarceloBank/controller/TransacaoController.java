@@ -19,9 +19,18 @@ public class TransacaoController
     }
 
     @GetMapping
-    public ResponseEntity<List<Transacao>> listarTodas() {
+    public ResponseEntity<List<TransacaoResponseDTO>> listarTodas() {
         List<Transacao> transacoes = transacaoRepository.findAll();
-        return ResponseEntity.ok(transacoes);
+        List<TransacaoResponseDTO> dtos = transacoes.stream()
+            .map(t -> new TransacaoResponseDTO(
+                t.getIdTransacao(),
+                t.getTipoTransacao(),
+                t.getValor(),
+                t.getStatus(),
+                t.getDataTransacao()
+            ))
+            .toList();
+        return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/conta/{numeroConta}")

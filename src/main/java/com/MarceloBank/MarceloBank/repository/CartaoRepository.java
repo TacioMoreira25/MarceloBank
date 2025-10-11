@@ -10,4 +10,6 @@ public interface CartaoRepository extends JpaRepository<Cartao, Integer>
 {
     @Query("SELECT c FROM Cartao c WHERE c.conta.cliente.cpf = :cpf")
     List<Cartao> findCartoesByClienteCpf(@Param("cpf") String cpf);
+
+    List<Cartao> findByContaNumeroConta(Integer numeroConta);
 }
